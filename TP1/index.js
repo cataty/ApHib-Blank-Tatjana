@@ -1,0 +1,38 @@
+import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose"; // Import mongoose for MongoDB object modeling
+import routerAPI from "./routers/index.js";
+
+
+dotenv.config();
+
+const port = process.env.PORT || 3000;
+const DB_URL = process.env.DB_URL;
+
+//Conenect to MongoDB
+
+mongoose.connect(DB_URL)
+    .then(() => console.log("MongoDB connected successfully!"))
+    .catch((err) => console.error("MongoDB connection error:", err));
+
+const db = mongoose.connection;
+
+db.on("error", (error) => console.log("MongoDB connection error", error));
+db.once("open", () => {
+    console.log("MongoDB connection opened successfully!");
+});
+
+const app = express();
+
+//Middleware
+app.use(express.json());
+
+routerAPI(app);
+
+app.listen(port, () =>{
+    console.info("Server is running on port: ", port);
+})
+
+app.get("/", (request, response) => {
+    response.send("Hello World")
+});
