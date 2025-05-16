@@ -38,26 +38,11 @@ const getCocktailById = async (request, response) => {
     try {
         const { id } = request.params;
         const cocktail = await Cocktail.findById(id);
-        if (cocktail) {
-            response.status(200).json({ msg: "OK", data: cocktail });
-        } else {
-            response.status(404).json({ error: 'Cocktail no encontrado', data: cocktail });
+        if (!cocktail) {
+            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktail });
         }
-    } catch (error) {
-        console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
-    }
-}
-
-const getCocktailByName = async (request, response) => {
-    try {
-        const { name } = request.params;
-        const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-        const cocktail = await Cocktail.find({ name: cleanedName });
-        if (cocktail.length > 0) {
+        else {
             response.status(200).json({ msg: "OK", data: cocktail });
-        } else {
-            response.status(404).json({ error: 'Cocktail no encontrado', data: cocktail });
         }
     } catch (error) {
         console.error({ error });
@@ -100,15 +85,15 @@ const getCocktailsByCategory = async (request, response) => {
         const { category } = request.params;
         const cleanedCategory = category.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
         const cocktails = await Cocktail.find({ category: cleanedCategory });
-        if (cocktails.length > 0) {
-            response.status(200).json({ msg: "OK", data: cocktails });
+        if (!cocktails || cocktails.length == 0) {
+            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktails });
         }
         else {
-            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktails });
+            response.status(200).json({ msg: "OK", data: cocktails });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Error del servidor', data: request.params });
     }
 }
 
@@ -116,15 +101,33 @@ const getCocktailsByGlass = async (request, response) => {
     try {
         const { glass } = request.params;
         const cocktails = await Cocktail.find({ glass: glass });
-        if (cocktails.length > 0) {
-            response.status(200).json({ msg: "OK", data: cocktails });
+        if (!cocktails || cocktails.length == 0) {
+            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktails });
         }
         else {
-            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktails });
+            response.status(200).json({ msg: "OK", data: cocktails });
         }
     } catch (error) {
         console.error({ error });
         response.status(500).json({ error: 'Error del servidor' });
+    }
+}
+
+const getCocktailByName = async (request, response) => {
+    try {
+        const { name } = request.body;
+        console.log(name);
+        const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+        const cocktails = await Cocktail.find({ name: cleanedName });
+        if (!cocktails || cocktails.length == 0) {
+            response.status(404).json({ error: 'Cocktails no encontrado', data: cocktails });
+        }
+        else {
+            response.status(200).json({ msg: "OK", data: cocktails });
+        }
+    } catch (error) {
+        console.error({ error });
+        response.status(500).json({ error: 'Error del servidor', data: request.params });
     }
 }
 

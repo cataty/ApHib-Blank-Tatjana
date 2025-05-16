@@ -10,6 +10,6 @@ router.get("/:id", getBeverageById); // GET request to fetch a Beverage by ID
 router.get("/name/:name", getBeverageByName); // GET request to fetch a Beverage by name
 router.get("/categories/:category", getBeveragesByCategory); // GET request to fetch Beverages by Category
 router.delete("/:id", deleteBeverageById); // DELETE request to delete a Beverage by ID 
-router.put("/:id", updateBeverageById); // PUT request to update a Cocktail by ID
+router.put("/:id", updateBeverageById); // PUT request to update a Beverage by ID
 
 export default router; // Export the router to be used in other parts of the application
