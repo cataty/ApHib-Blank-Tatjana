@@ -1,5 +1,5 @@
 import express from "express";
-import { getBeverages, setBeverage, getBeverageById, getBeverageByName, getBeveragesByCategory, getBeveragesByGlass, deleteBeverageById, updateBeverageById } from "../controllers/beverages.controller.js";
+import { getBeverages, setBeverage, getBeverageById, getBeverageByName, getBeveragesByCategory, getBeveragesByAlc, deleteBeverageById, updateBeverageById } from "../controllers/beverages.controller.js";
 
 const router = express.Router();
 

@@ -1,10 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Chango&family=Oi&family=Lemon&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+
+
 
 header{
     background-color: #f8f9fa;
     padding: 20px;
     text-align: center;
 }
+
 footer{
     background-color: #000;
     color: #fff;
@@ -14,10 +19,11 @@ footer{
     bottom: 0;
     width: 100%;
 }
+
 main{
     min-height: calc(80vh);
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-family: 'Chango', cursive;
+    font-family: 'Rubik', Arial, Helvetica, sans-serif;
 }

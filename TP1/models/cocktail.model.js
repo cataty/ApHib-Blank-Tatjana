@@ -3,12 +3,27 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const cocktailSchema = new Schema({
-    name: String,
-    category: String,
+    name: {
+        type: String,
+        required: true,
+        minlength: 3,
+    },
+    category: {
+        type: String,
+        required: true,
+        minlength: 3,
+    },
     glass: String,
-    ingredients: Array,
+    ingredients: {
+        type: Array,
+        required: true,
+    },
     garnish: String,
-    preparation: String
+    preparation: {
+        type: String,
+        required: true,
+        minlength: 3,
+    },
  });
 
 const Cocktail = mongoose.model("cocktail", cocktailSchema);

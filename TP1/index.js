@@ -26,6 +26,11 @@ const app = express();
 
 //Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
+app.use((request, response, next ) => {       
+    console.log(`${request.method} ${request.url}`);
+    next();
+})
 
 routerAPI(app);
 

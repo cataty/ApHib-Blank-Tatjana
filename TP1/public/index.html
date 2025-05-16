@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="styles.css">
+
     <title>Document</title>
 </head>
 <body>
@@ -17,17 +18,19 @@
             </ul>
         </nav>
     </header>
-        <h1>Cocktail Database</h1>
+    <main class="md:container md:mx-auto">
+        <h1 class="text-4xl my-8 text-indigo-800">Cocktail Database</h1>
         <section>
-            <h2>
+            <h2 class="text-2xl mb-8 text-indigo-950">
                 Cocktails Endpoints
             </h2>
-            <ul>
-                <li>
+
+            <ul class ="mb-16">
+                <li class="py-4 border-b-2 border-slate-200">
                     <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
                     <a class="font-bold" href="/api/cocktails">/api/cocktails</a>   - Trae todos los cocktails de la base de datos. 
                 </li>
-                <li>
+                <li class="py-4 border-b-2 border-slate-200">
                     <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
                     <a class="font-bold" href="/api/users">/api/cocktails</a> - Agrega un nuevo cocktail a la base de datos. Ejemplo de estructura:
                     <pre>
@@ -44,17 +47,17 @@
                             ],
                             "garnish": "Lemon twist",
                             "preparation": "Build into highball glass with ice cubes. Stir gently. If required, add dashes of Angostura bitters."
-                          }
+                        }
                     </pre>
                 </li>
-                <li>
+                <li class="py-6 border-b-2 border-slate-200">
                     <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a>   - Trae un cocktail por ID. 
+                    <a class="font-bold" href="/api/cocktails/5">/api/cocktails/:id</a>  - Trae un cocktail por ID. 
                 </li>
-                <li>
+                <li class="py-6 border-b-2 border-slate-200">
                     <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Modifica un cocktail en la base de datos por ID. Ejemplo de estructura (no se necesita rellenar todos los campos a la vez)
-:                    <pre>
+                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Modifica un cocktail en la base de datos por ID. Ejemplo de estructura (no es necesario cambiar todos los campos a la vez)
+                        <pre>
                         {
                             "iba": true,
                             "name": "Horse's Neck",
@@ -68,33 +71,110 @@
                             ],
                             "garnish": "Lemon twist",
                             "preparation": "Build into highball glass with ice cubes. Stir gently. If required, add dashes of Angostura bitters."
-                          }
+                        }
                     </pre>
                 </li>
-                <li>
+                <li class="py-6 border-b-2 border-slate-200">
                     <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a>   - Borra un cocktail de la base de datos por ID. 
+                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Borra un cocktail de la base de datos por ID. 
                 </li>
 
+                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/cocktails/categories/all-day-cocktail">/api/cocktails/categories/:category</a> - Trae los cocktails de la base de datos, filtrados por categoria. Los nombres de las categorias en la URL se escriben en minusculas, las palabras se separan con un guion.
+                    <p>Los nombres de las categorias son: </p> 
+                </li>
+                                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/cocktails/glasses/highball">/api/cocktails/glasses/:glass</a> - Trae los cocktails de la base de datos, filtrados por tipo de vaso. Los nombres de los vasos son:
+                </li>
             </ul>
-            <h2>
-                Users  Endpoints
+
+            <h2 class="text-2xl mb-8 text-indigo-950">
+                Beverages Endpoints
             </h2>
-            <ul>
-                <li>
-                    <a href="/api/cocktails">/api/cocktails</a>   - Trae todos los cocktails de la base de datos. 
+            <ul class ="mb-16">
+                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/beverages">/api/beverages</a> - Trae todas las bebidas de la base de datos. 
                 </li>
-                <li>
-                    <a href="/api/users">/api/users</a>   - Trae todos los users de la base de datos. 
+                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages</a> - Agrega una nueva bebida a la base de datos. Ejemplo de estructura del Objeto JSON:
+                    <pre>
+                        {
+                            "name":"Vodka",
+                            "category":"Liquors",
+                            "alcoholic":true,
+                            "alcoholContent":40,
+                        }
+                    </pre>
                 </li>
-                <li></li>
-                <li></li>
-                <li></li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/beverages/5">/api/beverages/:id</a>  - Trae una bebida por ID. 
+                </li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Modifica una bebida en la base de datos por ID. Ejemplo de estructura del Objeto JSON: (no es necesario cambiar todos los campos a la vez)
+                        <pre>
+                        {
+                            _id":"681d004699af07746c1cb9da",
+                            "name":"Vodka",
+                            "category":"Liquors",
+                            "alcoholic":true,
+                            "alcoholContent":40,
+                        }
+                    </pre>
+                </li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Borra una bebida de la base de datos por ID. 
+                </li>
             </ul>
-  
+           
+            <h2 class="text-2xl mb-8 text-indigo-950">
+                Users Endpoints
+            </h2>
+            <ul class ="mb-12">
+                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/users">/api/users</a> - Trae todos los usuarios de la base de datos. 
+                </li>
+                <li class="py-4 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
+                    <a class="font-bold" href="/api/users">/api/users</a> - Agrega un nuevo usuario a la base de datos. Ejemplo de estructura del Objeto JSON:
+                    <pre>
+                        {
+                            "name":"Sebastian",
+                            "email":"sebastian@davinci.edu.ar",
+                            "password":"12345678",
+                        }
+                    </pre>
+                </li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/users/5">/api/users/:id</a>  - Trae un usuario por ID. 
+                </li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
+                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Modifica un usuario en la base de datos por ID. Ejemplo de estructura del Objeto JSON: (no es necesario cambiar todos los campos a la vez)
+                        <pre>
+                        {
+                            "_id":"681c7444fae49d65839fe219",
+                            "name":"Sebastian",
+                            "email":"sebastian@davinci.edu.ar",
+                            "password":"12345678",
+                        }
+                    </pre>
+                </li>
+                <li class="py-6 border-b-2 border-slate-200">
+                    <span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
+                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Borra un usuario de la base de datos por ID. 
+                </li>
+            </ul>
   
         </section>
-    <main>
         
     </main>
     <footer>

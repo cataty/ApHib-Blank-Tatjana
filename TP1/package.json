@@ -11,12 +11,15 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@tailwindcss/cli": "^4.1.7",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "flowbite": "^3.1.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.16.0",
     "mongoose": "^8.14.1",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "tailwindcss": "^4.1.7"
   }
 }

@@ -112,5 +112,22 @@ const getBeveragesByCategory = async (request, response) => {
     }
 }
 
+const  getBeveragesByAlc = async (request, response) => {
+    try {
+        const { alcoholic=true } = request.query;
+        console.log(alcoholic);
+        const beverages = await Beverage.find({ alcoholic: true });
+        if (beverages.length > 0) {
+            response.status(200).json({ msg: "OK", data: beverages });
+        }
+        else {
+            response.status(404).json({ error: 'Bebidas no encontradas', data: beverages });
+        }
+    } catch (error) {
+        console.error({ error });
+        response.status(500).json({ error: 'Error del servidor' });
+    }
+}
 
-export { getBeverages, getBeveragesByCategory, getBeverageByName, setBeverage, getBeverageById, deleteBeverageById, updateBeverageById };
+
+export { getBeverages, getBeveragesByCategory, getBeverageByName, setBeverage, getBeverageById, deleteBeverageById, updateBeverageById,  getBeveragesByAlc };
