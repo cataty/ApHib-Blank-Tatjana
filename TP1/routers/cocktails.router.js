@@ -10,7 +10,7 @@ router.post("/", validateToken, setCocktail); // POST request to create a new Co
 router.get("/:id", getCocktailById); // GET request to fetch a Cocktail by ID
 router.get("/categories/:category", getCocktailsByCategory); // GET request to fetch Cocktails by Category
 router.get("/glasses/:glass", getCocktailsByGlass); // GET request to fetch Cocktails by Glass type
-router.get('/search/:name', getCocktailByName); // GET request to fetch a Cocktail by name
+router.get('/search/name', getCocktailByName); // GET request to fetch a Cocktail by name
 router.delete("/:id", validateToken, deleteCocktailById); // DELETE request to delete a Cocktail by ID 
 router.put("/:id", validateToken, updateCocktailById); // PUT request to update a Cocktail by ID
 

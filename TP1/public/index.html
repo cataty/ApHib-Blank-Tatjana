@@ -12,41 +12,44 @@
 
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="cocktails.html">Cocktails</a></li>
-                <li><a href="about.html">About</a></li>
+        <nav class="fixed bg-pink-800 w-full mt-[-20px] ml-[-20px] py-2">
+            <ul class="flex justify-center align-center">
+                <li class="px-4 py-2 text-white"><a href="#descripcion">Descripción</a></li>
+                <li class="px-4 py-2 text-white"><a href="#cocktails">Cocktails</a></li>
+                <li class="px-4 py-2 text-white"><a href="#beverages">Beverages</a></li>
+                <li class="px-4 py-2 text-white"><a href="#users">Users</a></li>
             </ul>
         </nav>
     </header>
-    <main class="md:container md:mx-auto">
-        <h1 class="text-4xl my-8 text-indigo-800">Cocktail Database</h1>
-        <section>
+    <main class="md:container md:mx-auto pt-12 pb-8">
+        <h1 class="text-4xl my-8 text-indigo-800">Cocktails and Beverages Database</h1>
+        <section id="descripcion">
             <h2 class="text-2xl mb-8 text-indigo-950">
-                Descripción de la API
+                Description
             </h2>
             <p class="mb-16">
-                Esta API permite gestionar una base de datos de cocktails y bebidas. Permite realizar operaciones CRUD
-                (Crear, Leer, Actualizar y Borrar) sobre los recursos de cocktails y bebidas. La API está construida
-                utilizando Node.js y Express, y utiliza MongoDB como base de datos.
+                This API allows you to manage a database of cocktails and beverages. It supports CRUD operations
+                (Create, Read, Update, and Delete) on cocktail and beverage resources. The API is built using Node.js
+                and Express, and uses MongoDB as its database.
             </p>
+        </section>
+        <section id="cocktails">
             <h2 class="text-2xl mb-8 text-indigo-950">
                 Cocktails Endpoints
             </h2>
-
             <ul class="mb-16">
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails</a> - Trae todos los cocktails de la base
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/cocktails">/api/cocktails</a> - Fetches a list of all the cocktails
+                    from the database.
                     de datos.
                 </li>
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
-                    <a class="font-bold" href="/api/users">/api/cocktails</a> - Agrega un nuevo cocktail a la base de
-                    datos. Ejemplo de estructura:
+                        class="inline-flex items-center rounded-md bg-green-50 px-2 mr-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
+                    <a class="font-bold" href="/api/users">/api/cocktails</a> - Adds a new cocktail to the databe.
+                    Example of JSON structure:
                     <pre>
                         {
                             "iba": true,
@@ -66,14 +69,14 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/cocktails/5">/api/cocktails/:id</a> - Trae un cocktail por ID.
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/cocktails/5">/api/cocktails/:id</a> - Fetched a cocktail by ID
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Modifica un cocktail en la base
-                    de datos por ID. Ejemplo de estructura (no es necesario cambiar todos los campos a la vez)
+                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 mr-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
+                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Modifies an existing cocktail in
+                    the database. Example of JSON structure (fields can be changed one by one):
                     <pre>
                         {
                             "iba": true,
@@ -93,49 +96,53 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
-                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Borra un cocktail de la base de
-                    datos por ID.
+                        class="inline-flex items-center rounded-md bg-red-50 px-2 mr-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
+                    <a class="font-bold" href="/api/cocktails">/api/cocktails/:id</a> - Deletes a cocktails from the
+                    databse by ID.
                 </li>
 
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
                     <a class="font-bold"
-                        href="/api/cocktails/categories/all-day-cocktail">/api/cocktails/categories/:category</a> - Trae
-                    los cocktails de la base de datos, filtrados por categoria. Los nombres de las categorias en la URL
-                    se escriben en minusculas, las palabras se separan con un guion.
-                    <p>Los nombres de las categorias son: </p>
+                        href="/api/cocktails/categories/all-day-cocktail">/api/cocktails/categories/:category</a> -
+                    Fetches cocktails from the database filtered by category. The category names in the URL are written
+                    in lowercase, with words separated by a hyphen. The available category names are:
+                    All Day Cocktail, Sparkling Cocktail, Before Dinner Cocktail, After Dinner Cocktail. </p>
                 </li>
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/cocktails/glasses/highball">/api/cocktails/glasses/:glass</a> - Trae
-                    los cocktails de la base de datos, filtrados por tipo de vaso. Los nombres de los vasos son:
-                </li>
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/cocktails/glasses/highball">/api/cocktails/glasses/:glass</a> -
+                    Fetches cocktails from the database filtered by glass type. The types of glasses are: martini,
+                    highball, old-fashioned, margarita, hurricane, champagne-flute.
                 </li>
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/cocktails/search?name=martini">api/cocktails/search?name</a> - Busca cocktail por nombre
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold"
+                        href="/api/cocktails/search/name?name=dry-martini">api/cocktails/search/name</a> - Searches a
+                    cocktail in the database by name. Spaces are replaced by hyphens. Format example:
+                    api/cocktails/search/name?name=dry-martini
                 </li>
             </ul>
-
+        </section>
+        <section id="beverages">
             <h2 class="text-2xl mb-8 text-indigo-950">
                 Beverages Endpoints
             </h2>
             <ul class="mb-16">
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/beverages">/api/beverages</a> - Trae todas las bebidas de la base de
-                    datos.
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/beverages">/api/beverages</a> - Fetches a list of all the beverages from
+                    the database.
                 </li>
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
-                    <a class="font-bold" href="/api/beverages">/api/beverages</a> - Agrega una nueva bebida a la base de
-                    datos. Ejemplo de estructura del Objeto JSON:
+                        class="inline-flex items-center rounded-md bg-green-50 px-2 mr-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages</a> - Adds a new beverage to the databe.
+                    Example of JSON structure:
                     <pre>
                         {
                             "name":"Vodka",
@@ -147,15 +154,15 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/beverages/681d004699af07746c1cb9da">/api/beverages/:id</a> - Trae una bebida por ID.
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/beverages/681d004699af07746c1cb9da">/api/beverages/:id</a> - Fetches
+                    a beverage by ID.
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
-                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Modifica una bebida en la base
-                    de datos por ID. Ejemplo de estructura del Objeto JSON: (no es necesario cambiar todos los campos a
-                    la vez)
+                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 mr-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Modifies an existing beverage in
+                    the database. Example of JSON structure (fields can be changed one by one):
                     <pre>
                         {
                             _id":"681d004699af07746c1cb9da",
@@ -168,26 +175,29 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
-                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Borra una bebida de la base de
-                    datos por ID.
+                        class="inline-flex items-center rounded-md bg-red-50 px-2 mr-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
+                    <a class="font-bold" href="/api/beverages">/api/beverages/:id</a> - Deletes a beverage from the
+                    databse by ID.
+                </li>
                 </li>
             </ul>
-
+        </section>
+        <section id="users">
             <h2 class="text-2xl mb-8 text-indigo-950">
                 Users Endpoints
             </h2>
             <ul class="mb-12">
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/users">/api/users</a> - Trae todos los usuarios de la base de datos.
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/users">/api/users</a> - Fetches a list of all the users from the
+                    database.
                 </li>
                 <li class="py-4 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
-                    <a class="font-bold" href="/api/users">/api/users</a> - Agrega un nuevo usuario a la base de datos.
-                    Ejemplo de estructura del Objeto JSON:
+                        class="inline-flex items-center rounded-md bg-green-50 px-2 mr-2 py-1 text-xs font-medium text-green-800 ring-1 ring-green-600/20 ring-inset">POST</span>
+                    <a class="font-bold" href="/api/users">/api/users</a> - Adds a new user to the databe. Example of
+                    JSON structure:
                     <pre>
                         {
                             "name":"Sebastian",
@@ -198,14 +208,15 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
-                    <a class="font-bold" href="/api/users/681c7444fae49d65839fe219">/api/users/:id</a> - Trae un usuario por ID.
+                        class="inline-flex items-center rounded-md bg-blue-50 px-2 mr-2 py-1 text-xs font-medium text-blue-800 ring-1 ring-blue-600/20 ring-inset">GET</span>
+                    <a class="font-bold" href="/api/users/681c7444fae49d65839fe219">/api/users/:id</a> - Fetches a user
+                    by ID.
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
-                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Modifica un usuario en la base de datos
-                    por ID. Ejemplo de estructura del Objeto JSON: (no es necesario cambiar todos los campos a la vez)
+                        class="inline-flex items-center rounded-md bg-yellow-50 px-2 mr-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">PUT</span>
+                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Modifies an existing user in the
+                    database. Example of JSON structure (fields can be changed one by one):
                     <pre>
                         {
                             "_id":"681c7444fae49d65839fe219",
@@ -217,9 +228,10 @@
                 </li>
                 <li class="py-6 border-b-2 border-slate-200">
                     <span
-                        class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
-                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Borra un usuario de la base de datos por
+                        class="inline-flex items-center rounded-md bg-red-50 px-2 mr-2 py-1 text-xs font-medium text-red-800 ring-1 ring-red-600/20 ring-inset">DELETE</span>
+                    <a class="font-bold" href="/api/users">/api/users/:id</a> - Deletes a user from the databse by its
                     ID.
+                </li>
                 </li>
             </ul>
 

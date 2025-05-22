@@ -114,8 +114,9 @@ const getCocktailsByGlass = async (request, response) => {
 }
 
 const getCocktailByName = async (request, response) => {
+    console.log(request.query);
     try {
-        const { name } = request.body;
+        const { name } = request.query;
         console.log(name);
         const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
         const cocktails = await Cocktail.find({ name: cleanedName });
