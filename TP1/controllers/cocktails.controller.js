@@ -68,9 +68,10 @@ const deleteCocktailById = async (request, response) => {
 const updateCocktailById = async (request, response) => {
     try {
         const { id } = request.params;
-        const cocktail = await Cocktail.findByIdAndUpdate(id);
+        const cocktail = request.body;
+        const updatedCocktail = await User.findByIdAndUpdate(id, cocktail);
         if (cocktail) {
-            response.status(200).json({ msg: 'Cocktail actualizado', data: cocktail });
+            response.status(200).json({ msg: 'Cocktail actualizado', data: updatedCocktail });
         } else {
             response.status(404).json({ error: 'Cocktail no encontrado', data: cocktail });
         }

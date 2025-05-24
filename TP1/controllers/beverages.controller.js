@@ -83,9 +83,10 @@ const deleteBeverageById = async (request, response) => {
 const updateBeverageById = async (request, response) => {
     try {
         const { id } = request.params;
-        const beverage = await Beverage.findByIdAndUpdate(id);
+        const beverage = request.body;
+        const updatedBeverage = await Beverage.findByIdAndUpdate(id);
         if (beverage) {
-            response.status(200).json({ msg: 'Bebida actualizada', data: beverage });
+            response.status(200).json({ msg: 'Bebida actualizada', data: updatedBeverage });
         } else {
             response.status(404).json({ error: 'Bebida no encontrada', data: beverage });
         }
