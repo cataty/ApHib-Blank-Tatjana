@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+
+
+
+header{
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+}
+
+footer{
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+main{
+    min-height: calc(80vh);
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-family: 'Rubik', Arial, Helvetica, sans-serif;
+}
