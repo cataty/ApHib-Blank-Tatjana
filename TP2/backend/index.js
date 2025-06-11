@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose"; // Import mongoose for MongoDB object modeling
+import mongoose from "mongoose";
+import cors from "cors";
 import routerAPI from "./routers/index.js";
 
 
@@ -25,6 +26,7 @@ db.once("open", () => {
 const app = express();
 
 //Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use((request, response, next ) => {       
