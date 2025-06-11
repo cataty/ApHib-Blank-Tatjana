@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react"
+import Header from '../components/Header'
 
 function BeveragesList (){
     const [beverages, setBeverages] = useState([]);
 
     return(
         <>
-        <h2>List of Beverages</h2>
+        <Header>List of Beverages</Header>
         </>
     )
 }

@@ -1,7 +1,10 @@
+import Header from '../components/Header'
+
 function NotFound (){
     return(
         <>
-        <h2>Not Found</h2>
+        <Header>Not Found</Header>
+        <p>The page you are looking for does not exist. Sorry!</p>
         </>
     )
 }
