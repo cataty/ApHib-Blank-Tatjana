@@ -4,88 +4,33 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 import Header from '../components/Header'
-import TaskContainer from '../components/TaskContainer'
-import Task from '../components/Task'
-import Card from '../components/Card'
-import ProductsContainer from '../components/ProductsContainer'
+import TodoList from '../components/TodoList'
+import TodoItem from '../components/TodoItem'
+import TodoForm from '../components/TodoForm' 
+
+import Home from '../views/home'
+import Tasks from '../views/Tasks'
+import NotFound from '../views/NotFound'
+
+import { Routes, Route, NavLink } from 'react-router-dom'
 
 
 function App() {
 
-  let loginState = false;
-  const tasks = [
-    {
-      id: 1,
-      titulo: "Comprar víveres",
-      descripcion: "Ir al supermercado y comprar leche, pan y frutas.",
-      estado: "pendiente"
-    },
-    {
-      id: 2,
-      titulo: "Estudiar React",
-      descripcion: "Repasar los conceptos de componentes y hooks en React.",
-      estado: "en progreso"
-    },
-    {
-      id: 3,
-      titulo: "Hacer ejercicio",
-      descripcion: "Salir a correr 30 minutos en el parque.",
-      estado: "pendiente"
-    },
-    {
-      id: 4,
-      titulo: "Llamar a mamá",
-      descripcion: "Llamar por teléfono para saber cómo está.",
-      estado: "completada"
-    },
-    {
-      id: 5,
-      titulo: "Leer un libro",
-      descripcion: "Leer al menos un capítulo del libro actual.",
-      estado: "pendiente"
-    }
-  ]
-
-  function saludar() {
-    alert('Hola!');
-  }
-
-  function passToParrent(name) {
-    alert('Padre ' + name);
-  }
-
-
   return (
     <>
+    <nav>
+      <ul>
+        <li><NavLink to='/'>Home</NavLink></li>
+        <li><NavLink to='/tasks'>Tasks</NavLink></li>
+      </ul>
+    </nav>
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/tasks" element={<Tasks />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
 
-      <Header title="To Do"></Header>
-      <button onClick={saludar} type='button'>Saludar</button>
-
-
-      <TaskContainer>
-        {
-          tasks.map(task => (
-            <Task
-              key={task.id}
-              id={task.id}
-              name={task.titulo}
-              description={task.descripcion}
-              state={task.estado}
-
-            />)
-          )
-        }
-      </TaskContainer>
-
-        <button onClick={() => setCount((count) => count + 1)}>
-
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }

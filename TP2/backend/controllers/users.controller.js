@@ -101,7 +101,7 @@ const updateUserById = async (request, response) => {
 const auth = async (request, response) => {
     try {
         const { email, password } = request.body;  
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email }); //busca el usuario por email
         if (!user) {
             return response.status(400).json({ error: 'Usuario no encontrado' });
         } else {
@@ -109,8 +109,11 @@ const auth = async (request, response) => {
             if (isValid) {
                 response.status(200).json({ msg: 'Usuario autenticado', data:user });
                 const jwt = jsonwebtoken.sign({id: user._id }, secret_key, { expiresIn: '2h' });
+                console.log(jwt); //imprime el token en la consola
+                response.json({ msg: 'ok', token: jwt });
+                             //signa el token con el id del usuario y la secret key
             } else {
-             //signa el token con el id del usuario y la secret key
+
                 response.status(400).json({ error: 'Contraseña incorrecta' });
             }
         }

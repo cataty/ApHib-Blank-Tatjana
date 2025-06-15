@@ -28,6 +28,10 @@ function CocktailsList() {
         fetchCocktails();
     }, []);
 
+       function handleChange(event){
+    setCocktail({ ...cocktail, [event.target.name]: event.target.value })
+   }
+
     async function postCocktail(event) {
         event.preventDefault();
         const options = {
@@ -42,6 +46,7 @@ function CocktailsList() {
 
             if (response.ok) {
                 const { data } = await response.json();
+                fetchCocktails();
             } else {
                 alert('Something went wrong saving the cocktail');
             }
@@ -77,12 +82,48 @@ function CocktailsList() {
             </ul>
             <form action="" onSubmit={postCocktail}>
                 <h2>Add a new Cocktail</h2>
-                <input type="text" placeholder="Name" />
-                <input type="text" placeholder="Category" />
-                <input type="text" placeholder="Glass" />
-                <input type="text" placeholder="Ingredients" />
-                <input type="text" placeholder="Garnish" />
-                <input type="text" placeholder="Preparation" />
+                <input 
+                type="text" 
+                placeholder="Name"
+                name="name"
+                id="name"
+                onChange={handleChange} 
+                />
+                <input               
+                type="text" 
+                placeholder="Category"
+                name="category"
+                id="category"
+                onChange={handleChange} 
+                />
+                <input 
+                type="text" 
+                placeholder="Glass"
+                name="glass"
+                id="glass"
+                onChange={handleChange} 
+                />
+                <input 
+                type="text" 
+                placeholder="Ingredients"
+                name="ingredients"
+                id="ingredients"
+                onChange={handleChange} 
+                />
+                <input 
+                type="text" 
+                placeholder="Garnish"
+                name="garnish"
+                id="garnish"
+                onChange={handleChange} 
+                />
+                <input 
+                type="text" 
+                placeholder="Preparation instructions"
+                name="preparation"
+                id="preparation"
+                onChange={handleChange} 
+                />
                 <button type="submit" >Add Cocktail</button>
             </form>
         </>

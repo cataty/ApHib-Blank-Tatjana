@@ -21,3 +21,22 @@ nav ul li{
   padding: 24px;
   list-style:none;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+max-width: 400px;
+  margin: auto;
+}
+input, button {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+

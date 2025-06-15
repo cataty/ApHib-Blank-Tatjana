@@ -1,9 +1,9 @@
-function Task ({ id, name, description, state, childEvent }){
-console.log({ id, name, description, state, childEvent });
+function Task ({ id, name, description, state, onDelete }){
     function clickHandler (){
         console.log('click', name);
         childEvent(name);
     }
+
     
     let stateClass;
     switch(state){
@@ -26,6 +26,7 @@ console.log({ id, name, description, state, childEvent });
             <p>{description}</p>
             <p className={stateClass}>{state}</p>
             <button onClick={clickHandler} type="button"> Click </button>
+            <button onClick={() => onDelete(id)} type="button"> Eliminar </button>
         </div>
     )
 

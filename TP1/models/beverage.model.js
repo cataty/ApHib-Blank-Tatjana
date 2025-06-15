@@ -2,16 +2,20 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const beverageSchema = new Schema({
-    name: String,
+    name:{ type: String,
         required: true,
         minlength: 3,
-    category: String,
+    },
+    category: { type: String,
         required: true,
         minlength: 3,
         maxlength: 30,
-    alcoholic: Boolean,
-            required: true,
-    alcoholContent: Number,
+    },
+    alcoholic: { type: Boolean,
+        required: true,
+    },
+    alcoholContent: { type: Number,
+    },
  });
 
 const Beverage = mongoose.model("beverage", beverageSchema);

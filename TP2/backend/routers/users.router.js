@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/", getUsers); // GET request to fetch users
 router.post("/", setUser); // POST request to create a new user
 router.post("/auth", validateToken); // authentification route for user login
+//router.post("register")
 router.get("/:id", getUserById); // GET request to fetch a user by ID
 router.delete("/:id", deleteUserById); // DELETE request to delete a user by ID 
 router.put("/:id", updateUserById); // PUT request to update a user by ID
