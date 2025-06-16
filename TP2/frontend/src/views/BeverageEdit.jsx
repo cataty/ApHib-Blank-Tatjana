@@ -34,22 +34,22 @@ function BeverageEdit() {
 
     async function putBeverage(event) {
         event.preventDefault();
-        console.log(user)
+        console.log(beverage)
         const options = {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(beverage),
         }
         try {
-            const response = await fetch(`${API_URL}users/${id}`, options); // TODO: validate input, change error msg language
+            const response = await fetch(`${API_URL}beverages/${id}`, options); // TODO: validate input, change error msg language
 
             if (response.ok) {
                 const { data } = await response.json();
                 setBeverage({ _id: '', name: '', email: '', password: '' }); // Reset form
                 alert('Beverage edited successfully');
-                navigate('/users');
+                navigate('/beverages');
             } else {
                 const {error} = await response.json();
                 alert('Something went wrong during registration: ' + error);
@@ -58,13 +58,13 @@ function BeverageEdit() {
 
         } catch (error) {
             console.error(error);
-            console.log('Error saving the user');
+            console.log('Error saving the beverage');
         }
     }
 
     return (
         <>
-            <Header title={`Edit Beverage Data: ${username}`} />            <form onSubmit={putBeverage}>
+            <Header title={`Edit Beverage Data: ${beverage.name}`} />            <form onSubmit={putBeverage}>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
