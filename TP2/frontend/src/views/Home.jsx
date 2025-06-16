@@ -3,9 +3,8 @@ import { useLocation } from 'react-router-dom';
 
 function Home (){
 
-
   const location = useLocation();
-  console.log(location.state.from);
+  const fromLogin = (location.state?.from === '/login') ? true : false;
 
     
   const [user, setUser] = useState({nombre: 'Héctor', apellido: 'Hernández'});
@@ -29,7 +28,7 @@ function Home (){
         <h2>Home</h2>
         <button onClick={cambiarNombre}>Change Name</button>
 
-{location.state.from === '/login' && (
+{fromLogin && (
         <h4>Welcome back, {user.nombre}. You now have full access to all out cocktail recipies and beverages. Feel free to add your own recipe, if you like!</h4>
 )}
 

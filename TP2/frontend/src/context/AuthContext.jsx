@@ -12,12 +12,12 @@ function AuthProvider({ children }) {
         setToken(token);
         setIsAdmin(userData.role === 'admin'); // if userData.role === 'admin', set isAdmin to true
         localStorage.setItem('token', token); // Store token in localStorage
-        localStorage.setItem('isAdmin', isAdmin); // Store user role in localStorage
+        localStorage.setItem('isAdmin', userData.role === 'admin'); // Store user role in localStorage
     }
 
     function logout() {
         localStorage.removeItem('token');
-        localStorage.removeItem('role');
+        localStorage.removeItem('isAdmin');
         setUser(null);
         setToken(null);
         setIsAdmin(false);
