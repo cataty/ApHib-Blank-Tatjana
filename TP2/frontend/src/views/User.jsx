@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import Header from '../components/Header'
 
 export default function User() {
+        const API_URL = process.env.REACT_APP_API_URL;
     const [user, setUser] = useState(null);
 
     useEffect(() => {

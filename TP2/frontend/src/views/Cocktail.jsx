@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 
 function Cocktail() {
-    const host = 'http://127.0.0.1:5000/api/'
-    const [cocktail, setCocktail] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL;
+    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '' });
     const [loading, setLoading] = useState(true);
 
 
     async function getCocktail() {
         try {
-            const response = await fetch(`${host}cocktail`);
+            const response = await fetch(`${API_URL }cocktail`);
             if (response.ok){
                 const data = await response.json();
                 setCocktail(data);

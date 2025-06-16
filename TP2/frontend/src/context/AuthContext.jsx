@@ -2,22 +2,30 @@ import { useState, createContext } from "react";
 
 const AuthContext = createContext();
 
-const AuthProvider = () => {
+function AuthProvider({ children }) {
+    const [token, setToken] = useState(localStorage.getItem('token'));
     const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(localStorage.getItem('role') === 'admin');
 
-    const login = (userData) => {
+    function login(userData, token) {
         setUser(userData);
-        setIsAuthenticated(true);
-    };
+        setToken(token);
+        setIsAdmin(userData.role === 'admin'); // if userData.role === 'admin', set isAdmin to true
+        localStorage.setItem('token', token); // Store token in localStorage
+        localStorage.setItem('isAdmin', isAdmin); // Store user role in localStorage
+    }
 
-    const logout = () => {
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
         setUser(null);
-        setIsAuthenticated(false);
-    };
+        setToken(null);
+        setIsAdmin(false);
+    }
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ user, token, isAdmin, login, logout }}>
+            {children}
         </AuthContext.Provider>
     );
 };

@@ -3,15 +3,14 @@ import ListItem from '../components/ListItem'
 import Header from '../components/Header'
 
 function CocktailsList() {
-
-    const host = 'http://127.0.0.1:5000/api/'
+    const API_URL = process.env.REACT_APP_API_URL;
     const [cocktails, setCocktails] = useState([]);
     const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '' });
 
     async function fetchCocktails() {
 
-        try { console.log()
-            const response = await fetch(`${host}cocktails`);
+        try {
+            const response = await fetch(`${API_URL}cocktails`);
             if (response.ok) {
                 const { data } = await response.json();
                 setCocktails(data);
@@ -42,7 +41,7 @@ function CocktailsList() {
             body: JSON.stringify(cocktail),
         }
         try {
-            const response = await fetch(`${host}cocktails`, options);
+            const response = await fetch(`${API_URL}cocktails`, options);
 
             if (response.ok) {
                 const { data } = await response.json();
@@ -80,52 +79,7 @@ function CocktailsList() {
                     />
                 ))}
             </ul>
-            <form action="" onSubmit={postCocktail}>
-                <h2>Add a new Cocktail</h2>
-                <input 
-                type="text" 
-                placeholder="Name"
-                name="name"
-                id="name"
-                onChange={handleChange} 
-                />
-                <input               
-                type="text" 
-                placeholder="Category"
-                name="category"
-                id="category"
-                onChange={handleChange} 
-                />
-                <input 
-                type="text" 
-                placeholder="Glass"
-                name="glass"
-                id="glass"
-                onChange={handleChange} 
-                />
-                <input 
-                type="text" 
-                placeholder="Ingredients"
-                name="ingredients"
-                id="ingredients"
-                onChange={handleChange} 
-                />
-                <input 
-                type="text" 
-                placeholder="Garnish"
-                name="garnish"
-                id="garnish"
-                onChange={handleChange} 
-                />
-                <input 
-                type="text" 
-                placeholder="Preparation instructions"
-                name="preparation"
-                id="preparation"
-                onChange={handleChange} 
-                />
-                <button type="submit" >Add Cocktail</button>
-            </form>
+
         </>
     )
 }

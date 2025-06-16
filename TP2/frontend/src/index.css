@@ -17,7 +17,7 @@ nav ul{
   justify-content: space-evenly;
 }
 
-nav ul li{
+ul li{
   padding: 24px;
   list-style:none;
 }
@@ -32,7 +32,7 @@ input, button {
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #0022e0;
 }
 button {
   background-color: #007bff;

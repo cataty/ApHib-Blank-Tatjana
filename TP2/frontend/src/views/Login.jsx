@@ -1,24 +1,85 @@
 import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 import Header from '../components/Header'
 
-function Login (){
+function Login() {
 
-    const [user, setUser] = useState({username: '', password: ''});
+    const API_URL = process.env.REACT_APP_API_URL;
+    const { login, isAdmin } = useContext(AuthContext);
+    const [user, setUser] = useState({ email: '', password: '' });
+    const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    function handleChange(event){
-       setUser({ ...user, [event.target.name]: event.target.value })
+    function handleChange(event) {
+        setUser({ ...user, [event.target.name]: event.target.value })
     }
 
-    function handleLogin(event){
+    async function handleLogin(event) {
         event.preventDefault();
+        // Validations
+        if (user.email.trim() === '') {
+            setMessage({ ...message, text: 'Please complete the Email field.' });
+            return;
+        }
+        if (!user.email.trim().includes('@')) {
+            setMessage({ ...message, text: 'Invalid email format. Please check your input.' });
+            return;
+        }
+        if (user.password.trim() === '') {
+            setMessage({ ...message, text: 'Please complete the Password field.' });
+            return;
+        }
+        if (user.password.trim().length <= 6) {
+            setMessage({ ...message, text: 'Password must be more than 6 characters long. Please check your input.' });
+            return;
+        }
+
+        // Submit login
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: user.email, password: user.password })
+        }
+
+        try {
+            const response = await fetch(`${API_URL}users/login`, options)
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                if (data.token) {
+                    login(data.user, data.token);
+                    navigate('/', { state: { from: location.pathname } });
+                }
+
+            } else {
+                const { error } = await response.json();
+                setMessage({ ...message, text: error });
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage({ ...message, text: 'An error occurred during login. Please try again later.' });
+        }
+
     }
 
-    return(
+    return (
         <>
-        <Header>Login</Header>
-        <form action="" onSubmit={handleLogin}>
-                          <label htmlFor="email">Email</label>
+            <Header>Login</Header>
+            {message.text && ( // Display message if it exists
+                <h4 className={message.type}>
+                    {message.text}
+                </h4>
+            )}
+
+            <form action="" onSubmit={handleLogin}>
+                <label htmlFor="email">Email</label>
                 <input
                     type="email"
                     id="email"
@@ -34,8 +95,10 @@ function Login (){
                     value={user.password}
                     onChange={handleChange}
                 />
-        </form>
-    
+                <button type="submit">Login</button>
+                <p>Don't have an account? <Link to={'/users/create'}>Register here</Link></p>
+            </form>
+
         </>
     )
 }

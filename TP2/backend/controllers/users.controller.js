@@ -107,20 +107,18 @@ const auth = async (request, response) => {
         } else {
             const isValid = await bcrypt.compare(password, user.password); //compara el password ingresado con el guardado en la base de datos
             if (isValid) {
-                response.status(200).json({ msg: 'Usuario autenticado', data:user });
                 const jwt = jsonwebtoken.sign({id: user._id }, secret_key, { expiresIn: '2h' });
                 console.log(jwt); //imprime el token en la consola
-                response.json({ msg: 'ok', token: jwt });
+                response.json({ msg: 'ok', token: jwt, user: { id: user._id, name: user.name, email: user.email, role: (user.role ? user.role : '') } });
                              //signa el token con el id del usuario y la secret key
             } else {
-
                 response.status(400).json({ error: 'Contraseña incorrecta' });
             }
         }
     }
     catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Error del servidor al logear el usuario' });
     }
 }
 

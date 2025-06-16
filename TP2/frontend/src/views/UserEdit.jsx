@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header'
 
 function UserEdit() {
-    const API_URL = 'http://127.0.0.1:5000/api/' // TODO: Move to a config file
+    const API_URL = process.env.REACT_APP_API_URL;
     const [user, setUser] = useState({ _id: '', name: '', email: '', password: '' });
     const [username, setUsername] = useState('');
     const navigate = useNavigate();

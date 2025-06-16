@@ -1,29 +1,31 @@
 import { useState, useEffect } from "react"
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import Header from '../components/Header'
 
 function UsersList() {
-    const API_URL = 'http://127.0.0.1:5000/api/' // TODO: Move to a config file
+    const API_URL = process.env.REACT_APP_API_URL;
     const [users, setUsers] = useState([]);
-    const [user, setUser] = useState({ _id: '', name: '', email: '', password: '' });
     const navigate = useNavigate();
 
     async function getUsers() {
         try {
             const response = await fetch(`${API_URL}users`);
-
+            console.log(response);
             if (response.ok) {
                 const { data } = await response.json();
                 setUsers(data);
             } else {
-                alert('Something went wrong fetching the users list');
+                alert('Error fetching the users list');
             }
         } catch (error) {
             console.error(error);
+
             console.log('Error fetching users list');
         }
     }
 
+    // Fetch users when the component mounts
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         getUsers();
     }, []);
@@ -32,33 +34,6 @@ function UsersList() {
     async function handleSearch(event) {
         event.preventDefault();  
     }            
-
-    async function postUser(event) {
-        event.preventDefault();
-        console.log(user)
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user),
-        }
-        try {
-            const response = await fetch(`${API_URL}users`, options); // TODO: validate input, change error msg language
-
-            if (response.ok) {
-                const { data } = await response.json();
-                getUsers();
-                setUser({ _id: '', name: '', email: '', password: '' }); // Reset form
-            } else {
-                const {error} = await response.json();
-                alert('Something went wrong: ' + error);
-            }
-        } catch (error) {
-            console.error(error);
-            console.log('Error saving the user');
-        }
-    }
 
     async function deleteUser(id) {
             alert('Are you sure you want to delete this user?');
@@ -87,9 +62,9 @@ function UsersList() {
 
     return (
         <>
-            <Header>List of Users</Header>
+            <Header title="List of Users" />
             <hr />
-            <form action="" onSubmit={() => {handleSearch(event)}}>
+            <form action="" onSubmit={() => {handleSearch()}}>
                 <input type="search" placeholder="Search users..." />
                 <button type="submit">Search</button>
             </form>

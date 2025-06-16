@@ -1,8 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
-import React from 'react';
-import { Route, Routes, NavLink } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { Outlet, Navigate, Route, Routes, NavLink } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+import PrivateRoute from './utils/PrivateRoute';
 
 import Navbar from './components/Navbar';
 import Home from './views/Home';
@@ -15,38 +16,39 @@ import Login from './views/Login';
 import NotFound from './views/NotFound';
 
 function App() {
+
   return (
     <div className="App">
       <header className="App-header">
         <Navbar />
-        
-
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
+
       <main>
-        <!--AuthProvider-->
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cocktails" element={<CocktailsList />} />
-            <Route path="/beverages" element={<BeveragesList />} />
-            <Route path="/users" element={<UsersList />} />
-            <Route path="/users/create" element={<UserCreate />} />
-            <Route path="/users/edit/:id" element={<UserEdit />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        <!--/AuthProvider-->
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cocktails" element={<CocktailsList />} />
+          <Route path="/cocktails/create" element={
+            <PrivateRoute>
+              <CocktailCreate />
+            </PrivateRoute>
+          } />
+          <Route path="/cocktails" element={<CocktailsList />} />
+          <Route path="/cocktails/edit/:id" element={
+            <PrivateRoute>
+              <CocktailEdit />
+            </PrivateRoute>
+          } />
+          <Route path="/beverages" element={<BeveragesList />} />
+          <Route path="/users" element={
+            <PrivateRoute>
+              <UsersList />
+            </PrivateRoute>
+          } />
+          <Route path="/users/create" element={<UserCreate />} />
+          <Route path="/users/edit/:id" element={<UserEdit />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </main>
     </div>
   );
