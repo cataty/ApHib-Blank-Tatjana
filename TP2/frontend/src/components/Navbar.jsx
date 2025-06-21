@@ -7,9 +7,6 @@ function Navbar() {
     const isLoggedIn = !!user
     const navigate = useNavigate();
 
-    console.log('Navbar user:', user);
-    console.log('Navbar isAdmin:', isAdmin);
-
     return (
         <nav>
             <ul>
@@ -23,7 +20,7 @@ function Navbar() {
                 )}
                 {isLoggedIn ? (
                     <>
-                        <li><NavLink to="/profile">Profile</NavLink></li>
+                        <li><NavLink to={`/users/${user.id}`}>Profile</NavLink></li>
                         <li><NavLink to="/login" onClick={e => {
                             e.preventDefault(); 
                             logout();

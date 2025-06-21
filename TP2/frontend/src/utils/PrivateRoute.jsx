@@ -1,15 +1,17 @@
-import { Outlet, Navigate, Route, Routes, NavLink } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from  '../context/AuthContext';
 
-function PrivateRoute() {
-
-    // Access the user from AuthContext       
+function PrivateRoute({ children }) {
     const { user } = useContext(AuthContext);
-    const isLoggedIn = !!user; // if  user is not null or undefined, isLoggedIn will be true
+    const isLoggedIn = !!user;
 
-        return isLoggedIn ? <Outlet /> : <Navigate to="/login" />;
+    if (!isLoggedIn) {
+        return <Navigate to="/login" />;
+    }
 
-
+    // Render children if provided, otherwise render <Outlet />
+    return children ? children : <Outlet />;
 }
-export default PrivateRoute
+
+export default PrivateRoute;

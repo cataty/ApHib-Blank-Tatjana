@@ -9,7 +9,7 @@ const getBeverages = async (request, response) => {
         response.status(200).json({ msg: "OK", data: beverages });
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server error' });
     }
 }
 
@@ -17,8 +17,8 @@ const setBeverage = async (request, response) => {
     try {
         const beverage = request.body;
 
-        if (await Beverage.findOne({ name: Beverage.name })) {
-            return response.status(400).json({ error: 'Una bebida con este nombre ya existe' });
+        if (await Beverage.findOne({ name: beverage.name })) {
+            return response.status(400).json({ error: 'A drink with this name already exists' });
         } else {
 
             const newBeverage = new Beverage(beverage);
@@ -26,11 +26,11 @@ const setBeverage = async (request, response) => {
 
             const id = newBeverage._id;
 
-            response.status(202).json({ msg: `Bebida guardada, id: ${id}` });
+            response.status(202).json({ msg: `Drink saved, id: ${id}` });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server error' });
     }
 }
 
@@ -41,7 +41,7 @@ const getBeverageById = async (request, response) => {
         if (beverage) {
             response.status(200).json({ msg: "OK", data: beverage });
         } else {
-            response.status(404).json({ error: 'Bebida no encontrada', data: beverage });
+            response.status(404).json({ error: 'Drink not found', data: beverage });
         }
     } catch (error) {
         console.error({ error });
@@ -57,7 +57,7 @@ const getBeverageByName = async (request, response) => {
         if (Beverage.length > 0) {
             response.status(200).json({ msg: "OK", data: beverage });
         } else {
-            response.status(404).json({ error: 'Bebida no encontrada', data: beverage });
+            response.status(404).json({ error: 'Drink not found', data: beverage });
         }
     } catch (error) {
         console.error({ error });
@@ -70,9 +70,9 @@ const deleteBeverageById = async (request, response) => {
         const { id } = request.params;
         const beverage = await Beverage.findByIdAndDelete(id);
         if (beverage) {
-            response.status(200).json({ msg: 'Bebida eliminada', data: beverage });
+            response.status(200).json({ msg: 'Drink deleted', data: beverage });
         } else {
-            response.status(404).json({ error: 'Bebida no encontrada', data: beverage });
+            response.status(404).json({ error: 'Drink not found', data: beverage });
         }
     } catch (error) {
         console.error({ error });
@@ -86,13 +86,13 @@ const updateBeverageById = async (request, response) => {
         const beverage = request.body;
         const updatedBeverage = await Beverage.findByIdAndUpdate(id);
         if (beverage) {
-            response.status(200).json({ msg: 'Bebida actualizada', data: updatedBeverage });
+            response.status(200).json({ msg: 'Drink updated', data: updatedBeverage });
         } else {
-            response.status(404).json({ error: 'Bebida no encontrada', data: beverage });
+            response.status(404).json({ error: 'Drink not found', data: beverage });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server error' });
     }
 }
 
@@ -105,30 +105,47 @@ const getBeveragesByCategory = async (request, response) => {
             response.status(200).json({ msg: "OK", data: beverages });
         }
         else {
-            response.status(404).json({ error: 'Bebidas no encontradas', data: beverages });
+            response.status(404).json({ error: 'Drinks not found', data: beverages });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server error' });
     }
 }
 
-const  getBeveragesByAlc = async (request, response) => {
+const getBeveragesByAlcoholic = async (request, response) => {
     try {
-        const { alcoholic=true } = request.query;
-        console.log(alcoholic);
-        const beverages = await Beverage.find({ alcoholic: true });
+
+        const { alcoholic } = request.query;         // Get the 'alcoholic' query parameter as a string ("true" or "false")
+        const isAlcoholic = alcoholic === "true"; // if acoholic = true, set boolean
+
+        const beverages = await Beverage.find({ alcoholic: isAlcoholic });
+
         if (beverages.length > 0) {
             response.status(200).json({ msg: "OK", data: beverages });
-        }
-        else {
-            response.status(404).json({ error: 'Bebidas no encontradas', data: beverages });
+        } else {
+            response.status(404).json({ error: 'Drinks not found', data: beverages });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server error' });
     }
-}
+};
+
+    const getBeverageCategories = async (request, response) => {
+        try {
+            const categories = await Beverage.distinct('category');
+            if (!categories || categories.length == 0) {
+                response.status(404).json({ error: 'No categories found', data: categories });
+            }
+            else {
+                response.status(200).json({ msg: "OK", data: categories });
+            }
+        } catch (error) {
+            console.error({ error });
+            response.status(500).json({ error: 'Server errror: no categories found' });
+        }
+    }
 
 
-export { getBeverages, getBeveragesByCategory, getBeverageByName, setBeverage, getBeverageById, deleteBeverageById, updateBeverageById,  getBeveragesByAlc };
+export { getBeverages, getBeveragesByCategory, getBeverageByName, setBeverage, getBeverageById, deleteBeverageById, updateBeverageById, getBeveragesByAlcoholic, getBeverageCategories };

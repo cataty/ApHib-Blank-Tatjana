@@ -32,7 +32,7 @@ function ListItem({ id, name, image = "" }) {
     }
 
     function onDelete(id) {
-            async function deleteUser(id) {
+            async function deleteUser(id) { 
             alert(`Are you sure you want to delete this ${itemType}?`);
             if (!window.confirm(`Are you sure you want to delete this ${itemType}?`)) {
                 return;
@@ -58,8 +58,7 @@ function ListItem({ id, name, image = "" }) {
 
     return (
         <li className="">
-            <h3>{id}: {name}</h3>
-            <NavLink to={`/${itemType}s/${id}`}>View</NavLink>
+            <NavLink to={`/${itemType}s/${id}`}><h3> {name}</h3></NavLink>
 
             <Routes>
                 <Route path={`${itemType}s/${id}`} element={<ViewComponent id={id} />} />

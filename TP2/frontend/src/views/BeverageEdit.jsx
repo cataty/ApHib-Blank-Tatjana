@@ -1,19 +1,23 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header'
 
 function BeverageEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
-     const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '' });
+    const { token } = useContext(AuthContext);
+    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '' });
+    const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
+    const [loading, setLoading] = useState(true);
 
     function handleChange(event) {
         setBeverage({ ...beverage, [event.target.name]: event.target.value })
     }
 
-    async function getBeverage(id){
-         try {
+    async function getBeverage(id) {
+        try {
             const response = await fetch(`${API_URL}beverages/${id}`);
             if (response.ok) {
                 const { data } = await response.json();
@@ -21,10 +25,12 @@ function BeverageEdit() {
             } else {
                 alert('Something went wrong fetching the beverage data');
             }
-         } catch (error) {
-             console.error(error);
-             console.log('Error fetching beverage data');
-         }
+        } catch (error) {
+            console.error(error);
+            console.log('Error fetching beverage data');
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -38,6 +44,7 @@ function BeverageEdit() {
         const options = {
             method: 'PUT',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(beverage),
@@ -47,11 +54,9 @@ function BeverageEdit() {
 
             if (response.ok) {
                 const { data } = await response.json();
-                setBeverage({ _id: '', name: '', email: '', password: '' }); // Reset form
-                alert('Beverage edited successfully');
-                navigate('/beverages');
+                navigate('/beverages', { state: { message: { text: "Beverage edited successfully!", type: "success" } } });
             } else {
-                const {error} = await response.json();
+                const { error } = await response.json();
                 alert('Something went wrong during registration: ' + error);
                 return;
             }
@@ -64,7 +69,12 @@ function BeverageEdit() {
 
     return (
         <>
-            <Header title={`Edit Beverage Data: ${beverage.name}`} />            <form onSubmit={putBeverage}>
+            <Header title={`Edit Beverage Data: ${beverage.name}`} />
+            {message.text && ( // Display message if it exists
+                <div className={`message ${message.type}`}>
+                    {message.text}
+                </div>
+            )} <form onSubmit={putBeverage}>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -81,7 +91,7 @@ function BeverageEdit() {
                     id="category"
                     name="category"
                     value={beverage.category}
-                                        placeholder={beverage.category}
+                    placeholder={beverage.category}
                     onChange={handleChange}
                     required
                 />
@@ -109,7 +119,7 @@ function BeverageEdit() {
                     type="number"
                     id="alcoholContent"
                     name="alcoholContent"
-                                        placeholder={beverage.alcoholContent}
+                    placeholder={beverage.alcoholContent}
                     value={beverage.alcoholContent}
                     onChange={handleChange}
                 />

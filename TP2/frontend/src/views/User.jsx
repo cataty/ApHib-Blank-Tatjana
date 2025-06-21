@@ -1,33 +1,63 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header'
 
-export default function User() {
-        const API_URL = process.env.REACT_APP_API_URL;
-    const [user, setUser] = useState(null);
+function User() {
+    const API_URL = process.env.REACT_APP_API_URL;
+    const { token } = useContext(AuthContext);
+    const [user, setUser] = useState({ _id: '', name: '', email: '', password: '', avatar: '' });
+    const [username, setUsername] = useState('');
+    const location = useLocation();
+    const message = location.state?.message;
+    const [loading, setLoading] = useState(true);
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    async function getUser(id) {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        };
+        try {
+            const response = await fetch(`${API_URL}users/${id}`, options);
+            if (response.ok) {
+                const { data } = await response.json();
+                setUser(data);
+                setUsername(data.name || 'User');
+            } else {
+                alert('Something went wrong fetching the user data');
+            }
+        } catch (error) {
+            console.error(error);
+            console.log('Error fetching user data');
+        } finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
-        // Simulate fetching user data
-        const fetchUser = async () => {
-            const response = await fetch('/api/user'); // Adjust the API endpoint as needed
-            const data = await response.json();
-            setUser(data);
-        };
+        getUser(id);
+    }, [id]);
 
-        fetchUser();
-    }, []);
+    if (loading) return <p>Loading...</p>;
 
     return (
         <>
-            <Header>User Profile</Header>
-            {user ? (
-                <div>
-                    <h2>{user.name}</h2>
-                    <p>Email: {user.email}</p>
-                </div>
-            ) : (
-                <p>Loading user data...</p>
-            )}
+            <Header title={`User profile: ${username}`} />
+            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            <div className="user-details">
+                <h2>{user.name}</h2>
+                {user.avatar && (
+                    <img src={`${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="User avatar" />
+                )}
+                <p><strong>Email:</strong> {user.email}</p>
+                                                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit user data</button>
+            </div>
         </>
-    );
+    )
 }
 
+export default User;

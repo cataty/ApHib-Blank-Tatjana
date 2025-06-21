@@ -1,4 +1,6 @@
 .App {
+  background-color: #282c34;
+  color: white;
   text-align: center;
 }
 
@@ -14,18 +16,30 @@
 }
 
 .App-header {
-  background-color: #282c34;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
 }
 
 .App-link, a {
-  color: #61dafb;
+  color: #e6ffed;
+    text-decoration: none;
 }
+
+.message {
+  margin: 1em auto;
+  padding: 1em;
+  border-radius: 6px;
+  max-width: 500px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.message.success { background: #e6ffed; color: #207544; border: 1px solid #b7e4c7; }
+.message.alert   { background: #fff4e6; color: #b85c00; border: 1px solid #ffd6a5; }
+
 
 @keyframes App-logo-spin {
   from {
@@ -33,5 +47,113 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+.cocktails-header {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+.filter-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5em;
+}
+
+.filter-list li a {
+  display: inline-block;
+  padding: 0.4em 1em;
+  border-radius: 4px;
+  background: #f5f5f5;
+  color: #207544;
+  text-decoration: none;
+  border: 1px solid #b7e4c7;
+  transition: background 0.2s, color 0.2s;
+}
+
+.filter-list li a:hover {
+  background: #207544;
+  color: #fff;
+}
+
+main {
+  padding:6em;
+  min-height: calc(100vw - 192px);
+}
+
+form {
+  border-radius: 8px;
+  padding: 1em 1.5em;
+  margin: 1.5em auto;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+
+form h2 {
+  margin-bottom: 0.5em;
+  font-size: 1.2em;
+  color: #333;
+
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 2em auto;
+  max-width: 700px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5em;
+}
+
+li {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+li img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #eee;
+}
+
+li .cocktail-info {
+  flex: 1;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2em;
+  border-collapse: collapse;
+  min-width: 400px;
+}
+
+th, td {
+  padding: 0.7em 1.2em;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+thead {
+  background: #363636;
+}
+
+@media (max-width: 600px) {
+  form, ul {
+    max-width: 98vw;
   }
 }

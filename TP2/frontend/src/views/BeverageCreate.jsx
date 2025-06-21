@@ -1,15 +1,22 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
 
 function BeverageCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
+    const { token } = useContext(AuthContext);
     const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '' });
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
     function handleChange(event) {
         setBeverage({ ...beverage, [event.target.name]: event.target.value })
+        setMessage({ ...message, text: "" });
+    }
+
+    function handleFocus(event) {
+        setMessage({ ...message, text: "" });
     }
 
     async function postBeverage(event) {
@@ -34,9 +41,10 @@ function BeverageCreate() {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: beverage.name, email: beverage.email, password: beverage.password }),
+            body: JSON.stringify(beverage),
             // TODO: validate input, change error message language
         }
         try {
@@ -44,18 +52,16 @@ function BeverageCreate() {
 
             if (response.ok) {
                 const { data } = await response.json();
-                setBeverage({ name: '', email: '', password: '', passwordRepeat: '' }); // Reset 
-                setMessage({ text: 'Beverage created successfully', type: 'success' });
-                navigate('/beverages');
+                navigate('/beverages', { state: { message: { text: "Beverage created successfully!", type: "success" } } });
             } else {
                 const { error } = await response.json();
-                alert('Something went wrong during registration: ' + error);
+                setMessage({...message, text: error})
                 return;
             }
 
         } catch (error) {
             console.error(error);
-            console.log('Error saving the beverage');
+            setMessage({...message, text: error})
         }
     }
 
@@ -64,10 +70,10 @@ function BeverageCreate() {
             <Header title="Create Beverage" />
             <p>Fill in the form below to create a new beverage.</p>
 
-            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
-                <h4 className={message.type}>
+            {message.text && ( // Display message if it exists
+                <div className={`message ${message.type}`}>
                     {message.text}
-                </h4>
+                </div>
             )}
 
             <form onSubmit={postBeverage}>
@@ -78,6 +84,7 @@ function BeverageCreate() {
                     name="name"
                     value={beverage.name}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
                 <label htmlFor="category">Category</label>
@@ -87,6 +94,7 @@ function BeverageCreate() {
                     name="category"
                     value={beverage.category}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
                 <label>
@@ -96,6 +104,7 @@ function BeverageCreate() {
                         value="yes"
                         checked={beverage.alcoholic === "true"}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                     />
                     Alcoholic
                 </label>
@@ -106,6 +115,7 @@ function BeverageCreate() {
                         value="no"
                         checked={beverage.alcoholic === "false"}
                         onChange={handleChange}
+                        onFocus={handleFocus}
                     />
                     Non-Alcoholic
                 </label>
@@ -115,6 +125,7 @@ function BeverageCreate() {
                     name="alcoholContent"
                     value={beverage.alcoholContent}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                 />
                 <button type="submit">Add Beverage</button>
             </form>

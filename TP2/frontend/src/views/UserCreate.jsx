@@ -1,15 +1,22 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
 
 function UserCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
+    const { token } = useContext(AuthContext);
     const [user, setUser] = useState({ name: '', email: '', password: '', passwordRepeat: '' });
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
     function handleChange(event) {
-        setUser({ ...user, [event.target.name]: event.target.value })
+        setUser({ ...user, [event.target.name]: event.target.value });
+        setMessage({ ...message, text: "" });
+    }
+
+    function handleFocus(event) {
+        setMessage({ ...message, text: "" });
     }
 
     async function postUser(event) {
@@ -46,22 +53,21 @@ function UserCreate() {
         const options = {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ name: user.name, email: user.email, password: user.password }),
-            // TODO: validate input, change error message language
         }
         try {
-            const response = await fetch(`${API_URL}users`, options); // TODO: validate input, change error message language
+            const response = await fetch(`${API_URL}users`, options); // TODO: change error message language
+            const { data } = await response.json();
 
             if (response.ok) {
-                const { data } = await response.json();
                 setUser({ name: '', email: '', password: '', passwordRepeat: '' }); // Reset 
-                setMessage({ text: 'User created successfully', type: 'success' });
-                navigate('/users');
+                navigate('/users', { state: { message: { text: "User created successfully!", type: "success" } } });
             } else {
-                const { error } = await response.json();
-                alert('Something went wrong during registration: ' + error);
+                setMessage({ text: `${data}`, type: 'alert' });
+                alert('Something went wrong during registration: ' + data);
                 return;
             }
 
@@ -76,13 +82,13 @@ function UserCreate() {
             <Header title="Create User" />
             <p>Fill in the form below to create a new user.</p>
 
-            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
-                <h4 className={message.type}>
+            {message.text && ( // Display message if it exists
+                <div className={`message ${message.type}`}>
                     {message.text}
-                </h4>
+                </div>
             )}
 
-            <form onSubmit={postUser}>
+            <form enctype="multipart/form-data" onSubmit={postUser}>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -90,6 +96,7 @@ function UserCreate() {
                     name="name"
                     value={user.name}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
                 <label htmlFor="email">Email</label>
@@ -99,6 +106,7 @@ function UserCreate() {
                     name="email"
                     value={user.email}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
                 <label htmlFor="password">Password</label>
@@ -108,16 +116,25 @@ function UserCreate() {
                     name="password"
                     value={user.password}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
+                <label htmlFor="password">Repeat Password</label>
                 <input
                     type="password"
                     id="passwordRepeat"
                     name="passwordRepeat"
                     value={user.passwordRepeat}
                     onChange={handleChange}
+                    onFocus={handleFocus}
                     required
                 />
+                <input
+                    type="file"
+                    id="avatar"
+                    name="avatar" 
+                >
+                </input>
                 <button type="submit">Add User</button>
             </form>
         </>

@@ -54,7 +54,7 @@ function Login() {
                 console.log(data);
                 if (data.token) {
                     login(data.user, data.token);
-                    navigate('/', { state: { from: location.pathname } });
+                    navigate('/', { state: { from: location.pathname, message: { text: "Login successfull. Welcome back!", type: "success" } } });
                 }
 
             } else {
@@ -73,9 +73,9 @@ function Login() {
         <>
             <Header>Login</Header>
             {message.text && ( // Display message if it exists
-                <h4 className={message.type}>
+                <div className={`message ${message.type}`}>
                     {message.text}
-                </h4>
+                </div>
             )}
 
             <form action="" onSubmit={handleLogin}>

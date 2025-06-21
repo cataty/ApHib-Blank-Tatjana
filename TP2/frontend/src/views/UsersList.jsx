@@ -1,26 +1,49 @@
-import { useState, useEffect } from "react"
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useContext } from "react"
+import { AuthContext } from "../context/AuthContext";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import Header from '../components/Header'
 
 function UsersList() {
     const API_URL = process.env.REACT_APP_API_URL;
+    const { token } = useContext(AuthContext);
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const message = location.state?.message;
+    const [loading, setLoading] = useState(true);
 
     async function getUsers() {
+
         try {
-            const response = await fetch(`${API_URL}users`);
-            console.log(response);
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            const response = await fetch(`${API_URL}users`, options);
             if (response.ok) {
                 const { data } = await response.json();
                 setUsers(data);
             } else {
-                alert('Error fetching the users list');
+                // Try to parse error as JSON, but fallback to text if it fails
+                let errorMsg = '';
+                try {
+                    const { error } = await response.json();
+                    errorMsg = error;
+                } catch {
+                    errorMsg = await response.text();
+                }
+                alert('Error fetching the users list: ' + errorMsg);
             }
         } catch (error) {
             console.error(error);
 
             console.log('Error fetching users list');
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -32,16 +55,20 @@ function UsersList() {
 
 
     async function handleSearch(event) {
-        event.preventDefault();  
-    }            
+        event.preventDefault();
+    }
 
     async function deleteUser(id) {
-            alert('Are you sure you want to delete this user?');
-            if (!window.confirm('Are you sure you want to delete this user?')) {
-                return;
-            }
+        alert('Are you sure you want to delete this user?');
+        if (!window.confirm('Are you sure you want to delete this user?')) {
+            return;
+        }
         const options = {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
         }
         try {
             const response = await fetch(`${API_URL}users/${id}`, options);
@@ -58,13 +85,14 @@ function UsersList() {
         }
     }
 
-
+    if (loading) return <p>Loading...</p>;
 
     return (
         <>
             <Header title="List of Users" />
+            {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <hr />
-            <form action="" onSubmit={() => {handleSearch()}}>
+            <form action="" onSubmit={() => { handleSearch() }}>
                 <input type="search" placeholder="Search users..." />
                 <button type="submit">Search</button>
             </form>
