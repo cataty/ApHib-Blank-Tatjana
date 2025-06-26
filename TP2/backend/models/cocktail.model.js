@@ -14,7 +14,13 @@ const cocktailSchema = new Schema({
     },
     glass: String,
     ingredients: {
-        type: Array,
+        type: [
+            {
+                amount: String,
+                unit: String,
+                ingredient: String
+            }
+        ],
         required: true,
     },
     garnish: String,
@@ -23,7 +29,8 @@ const cocktailSchema = new Schema({
         required: true,
         minlength: 3,
     },
- });
+    image: String,
+});
 
 const Cocktail = mongoose.model("cocktail", cocktailSchema);
 

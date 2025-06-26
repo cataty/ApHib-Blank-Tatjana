@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import upload from "../middleware/imgUpload.js";
 import { getUsers, setUser, getUserById, deleteUserById, updateUserById, auth } from "../controllers/users.controller.js";
-import { uploadContoller } from "../controllers/upload.controller.js";
+import { uploadController } from "../controllers/upload.controller.js";
 import validateToken from "../middleware/auth.js";
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.get("/:id", validateToken, getUserById); // GET request to fetch a user b
 router.delete("/:id", validateToken, deleteUserById); // DELETE request to delete a user by ID
 router.put("/:id", validateToken ,upload.single("file"), updateUserById); // PUT request to update a user by ID
 
-router.post("/upload", upload.single("file"), uploadContoller ) // POST request to upload a file
-router.put("/upload", validateToken, upload.single("file"), uploadContoller ) // PUT request to upload a file
+router.post("/upload", upload.single("file"), uploadController ) // POST request to upload a file
+router.put("/upload", validateToken, upload.single("file"), uploadController ) // PUT request to upload a file
 
 export default router; // Export the router to be used in other parts of the application

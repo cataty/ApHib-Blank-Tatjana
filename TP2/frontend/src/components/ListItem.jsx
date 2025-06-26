@@ -3,11 +3,13 @@ import Cocktail from '../views/Cocktail';
 import Beverage from '../views/Beverage';
 import User from '../views/User';
 import { AuthContext } from '../context/AuthContext';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
-function ListItem({ id, name, image = "" }) {
+function ListItem({ id, name, image, onRefresh }) {
     const API_URL = process.env.REACT_APP_API_URL;
     const { isAdmin } = useContext(AuthContext);
+    const [message, setMessage] = useState({ text: '', type: 'alert' });
+    const { token } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -31,13 +33,14 @@ function ListItem({ id, name, image = "" }) {
         navigate(`/${itemType}s/edit/${id}`)
     }
 
-    function onDelete(id) {
-            async function deleteUser(id) { 
-            alert(`Are you sure you want to delete this ${itemType}?`);
-            if (!window.confirm(`Are you sure you want to delete this ${itemType}?`)) {
-                return;
-            }
+    async function onDelete(id) {
+        if (!window.confirm(`Are you sure you want to delete this ${itemType}?`)) {
+            return;
+        }
         const options = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
             method: `DELETE`,
         }
         try {
@@ -45,29 +48,31 @@ function ListItem({ id, name, image = "" }) {
 
             if (response.ok) {
                 const { data } = await response.json();
-                // getUsers(); TODO CHANGE FUNCTION PRGRAMMATICALLY!!!!!!!!!!!!!!!!!!
+                if (onRefresh) {
+                    onRefresh();
+                }
             } else {
                 alert(`Something went wrong deleting the ${itemType}`);
             }
         } catch (error) {
             console.error(error);
-            console.log(`Error deleting the ${itemType}`);
+            setMessage({ text: `Error deleting the ${itemType}` });
         }
-    }
     }
 
     return (
-        <li className="">
+        <li className="drink-list-item">
+            <img src={image ? image : '/img/cocktail_placeholder_1.png'} alt={name} />
             <NavLink to={`/${itemType}s/${id}`}><h3> {name}</h3></NavLink>
 
             <Routes>
                 <Route path={`${itemType}s/${id}`} element={<ViewComponent id={id} />} />
             </Routes>
             {isAdmin && (
-                <>
+                <div className="buttons">
                     <button type="button" onClick={() => onEdit(id)}>edit</button>
                     <button type="button" onClick={() => onDelete(id)}>delete</button>
-                </>
+                </div>
             )}
         </li>
 

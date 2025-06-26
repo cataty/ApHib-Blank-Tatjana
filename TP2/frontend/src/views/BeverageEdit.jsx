@@ -40,24 +40,44 @@ function BeverageEdit() {
 
     async function putBeverage(event) {
         event.preventDefault();
-        console.log(beverage)
+        const beverageToSend = {
+            ...beverage,
+            alcoholic: beverage.alcoholic === "true" ? true : false,
+        };
+
+        // Validations
+        if (beverageToSend.name.trim().length < 3) {
+            setMessage({ ...message, text: 'Beverage name cannot be less than 3 caracters. Please check your input.' });
+            return;
+        }
+        if (beverageToSend.category.trim() == '') {
+            setMessage({ ...message, text: 'Please complete the category field.' });
+            return;
+        }
+        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent.trim() === '') {
+            setMessage({ ...message, text: 'Please complete the alcohol content field.' });
+            return;
+        }
+
+        // If all validations pass, proceed to post the beverag
         const options = {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(beverage),
+            body: JSON.stringify(beverageToSend),
         }
+
         try {
-            const response = await fetch(`${API_URL}beverages/${id}`, options); // TODO: validate input, change error msg language
+            const response = await fetch(`${API_URL}beverages/${id}`, options);
 
             if (response.ok) {
                 const { data } = await response.json();
                 navigate('/beverages', { state: { message: { text: "Beverage edited successfully!", type: "success" } } });
             } else {
                 const { error } = await response.json();
-                alert('Something went wrong during registration: ' + error);
+                alert('Something went wrong updating the drink ' + error);
                 return;
             }
 
@@ -81,7 +101,6 @@ function BeverageEdit() {
                     id="name"
                     name="name"
                     value={beverage.name}
-                    placeholder={beverage.name}
                     onChange={handleChange}
                     required
                 />
@@ -91,7 +110,6 @@ function BeverageEdit() {
                     id="category"
                     name="category"
                     value={beverage.category}
-                    placeholder={beverage.category}
                     onChange={handleChange}
                     required
                 />
@@ -99,8 +117,8 @@ function BeverageEdit() {
                     <input
                         type="radio"
                         name="alcoholic"
-                        value="yes"
-                        checked={beverage.alcoholic === "true"}
+                        value="true"
+                        checked={beverage.alcoholic === true || beverage.alcoholic === "true"}
                         onChange={handleChange}
                     />
                     Alcoholic
@@ -109,8 +127,8 @@ function BeverageEdit() {
                     <input
                         type="radio"
                         name="alcoholic"
-                        value="no"
-                        checked={beverage.alcoholic === "false"}
+                        value="false"
+                        checked={beverage.alcoholic === false || beverage.alcoholic === "false"}
                         onChange={handleChange}
                     />
                     Non-Alcoholic
@@ -119,7 +137,6 @@ function BeverageEdit() {
                     type="number"
                     id="alcoholContent"
                     name="alcoholContent"
-                    placeholder={beverage.alcoholContent}
                     value={beverage.alcoholContent}
                     onChange={handleChange}
                 />

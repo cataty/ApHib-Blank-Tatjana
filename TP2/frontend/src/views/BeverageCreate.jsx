@@ -6,7 +6,7 @@ import Header from '../components/Header'
 function BeverageCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '' });
+    const [beverage, setBeverage] = useState({ name: '', category: '', alcoholic: '', alcoholContent: '' });
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
@@ -21,18 +21,20 @@ function BeverageCreate() {
 
     async function postBeverage(event) {
         event.preventDefault();
-        console.log(beverage)
-
+    const beverageToSend = {
+        ...beverage,
+        alcoholic: beverage.alcoholic === "true" ? true : false,
+    };
         // Validations
-        if (beverage.name.trim().length < 3) {
+        if (beverageToSend.name.trim().length < 3) {
             setMessage({ ...message, text: 'Beverage name cannot be less than 3 caracters. Please check your input.' });
             return;
         }
-        if (beverage.category.trim() == '') {
+        if (beverageToSend.category.trim() == '') {
             setMessage({ ...message, text: 'Please complete the category field.' });
             return;
         }
-        if (beverage.alcoholic && beverage.alcoholContent.trim() === '') {
+        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent.trim() === '') {
             setMessage({ ...message, text: 'Please complete the alcohol content field.' });
             return;
         }
@@ -44,11 +46,12 @@ function BeverageCreate() {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(beverage),
-            // TODO: validate input, change error message language
+            body: JSON.stringify(beverageToSend),
+
         }
+        console.log(beverage);
         try {
-            const response = await fetch(`${API_URL}beverages`, options); // TODO: validate input, change error message language
+            const response = await fetch(`${API_URL}beverages`, options);
 
             if (response.ok) {
                 const { data } = await response.json();
@@ -97,28 +100,33 @@ function BeverageCreate() {
                     onFocus={handleFocus}
                     required
                 />
-                <label>
-                    <input
+                <div>
+                <label htmlFor="alcoholic">
+ 
+                    Alcoholic
+                </label>
+                                   <input
                         type="radio"
                         name="alcoholic"
-                        value="yes"
+                        value="true"
                         checked={beverage.alcoholic === "true"}
                         onChange={handleChange}
                         onFocus={handleFocus}
                     />
-                    Alcoholic
+                <label htmlFor="alcoholic">
+  
+                    Non-Alcoholic
                 </label>
-                <label>
-                    <input
+                <input
                         type="radio"
                         name="alcoholic"
-                        value="no"
+                        value="false"
                         checked={beverage.alcoholic === "false"}
                         onChange={handleChange}
                         onFocus={handleFocus}
                     />
-                    Non-Alcoholic
-                </label>
+                </div>
+                <label htmlFor="alcoholContent">Alcohol Content</label>
                 <input
                     type="number"
                     id="alcoholContent"

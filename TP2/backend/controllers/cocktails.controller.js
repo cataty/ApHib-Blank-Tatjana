@@ -1,5 +1,5 @@
 import Cocktail from "../models/cocktail.model.js";
-
+import upload from "../middleware/imgUpload.js";
 
 // const cocktailModel = new CocktailsManager;
 
@@ -20,17 +20,23 @@ const setCocktail = async (request, response) => {
         if (await Cocktail.findOne({ name: cocktail.name })) {
             return response.status(400).json({ error: 'A cocktail with this name already exists' });
         } else {
-
+            if (typeof request.body.ingredients === 'string') {
+                try {
+                    request.body.ingredients = JSON.parse(request.body.ingredients);
+                } catch (error) {
+                    return response.status(400).json({ error: 'Invalid ingredients format' });
+                }
+            }
             const newCocktail = new Cocktail(cocktail);
-            newCocktail.save();
+            await newCocktail.save();
 
             const id = newCocktail._id;
 
             response.status(202).json({ msg: `Cocktail saved, id: ${id}` });
         }
     } catch (error) {
-        console.error({ error });
-        response.status(500).json({ error: 'Server errror' });
+        console.error(error); // not { error }
+        response.status(500).json({ error: error.message || 'Server error' });
     }
 }
 
@@ -69,8 +75,11 @@ const updateCocktailById = async (request, response) => {
     try {
         const { id } = request.params;
         const cocktail = request.body;
-        const updatedCocktail = await User.findByIdAndUpdate(id, cocktail);
-        if (cocktail) {
+        if (typeof request.body.ingredients === 'string') {
+            request.body.ingredients = JSON.parse(request.body.ingredients);
+        }
+        const updatedCocktail = await Cocktail.findByIdAndUpdate(id, cocktail);
+        if (updatedCocktail) {
             response.status(200).json({ msg: 'Cocktail updated', data: updatedCocktail });
         } else {
             response.status(404).json({ error: 'Cocktail not found', data: cocktail });
@@ -133,35 +142,35 @@ const getCocktailByName = async (request, response) => {
     }
 }
 
-    const getCocktailCategories = async (request, response) => {
-        try {
-            const categories = await Cocktail.distinct('category');
-            if (!categories || categories.length == 0) {
-                response.status(404).json({ error: 'No categories found', data: categories });
-            }
-            else {
-                response.status(200).json({ msg: "OK", data: categories });
-            }
-        } catch (error) {
-            console.error({ error });
-            response.status(500).json({ error: 'Server errror: no categories found' });
+const getCocktailCategories = async (request, response) => {
+    try {
+        const categories = await Cocktail.distinct('category');
+        if (!categories || categories.length == 0) {
+            response.status(404).json({ error: 'No categories found', data: categories });
         }
+        else {
+            response.status(200).json({ msg: "OK", data: categories });
+        }
+    } catch (error) {
+        console.error({ error });
+        response.status(500).json({ error: 'Server errror: no categories found' });
     }
+}
 
-    const getCocktailGlasses = async (request, response) => {
-        try {
-            const glasses = await Cocktail.distinct('glass');
-            if (!glasses || glasses.length == 0) {
-                response.status(404).json({ error: 'No glasses found', data: glasses });
-            }
-            else {
-                response.status(200).json({ msg: "OK", data: glasses });
-            }
-        } catch (error) {
-            console.error({ error });
-            response.status(500).json({ error: 'Server errror: no glasses found' });
+const getCocktailGlasses = async (request, response) => {
+    try {
+        const glasses = await Cocktail.distinct('glass');
+        if (!glasses || glasses.length == 0) {
+            response.status(404).json({ error: 'No glasses found', data: glasses });
         }
+        else {
+            response.status(200).json({ msg: "OK", data: glasses });
+        }
+    } catch (error) {
+        console.error({ error });
+        response.status(500).json({ error: 'Server errror: no glasses found' });
     }
+}
 
 
 export { getCocktails, getCocktailsByCategory, getCocktailsByGlass, getCocktailByName, setCocktail, getCocktailById, deleteCocktailById, updateCocktailById, getCocktailCategories, getCocktailGlasses };

@@ -88,9 +88,9 @@ function UsersList() {
     if (loading) return <p>Loading...</p>;
 
     return (
-        <>
-            <Header title="List of Users" />
+        <>            
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            <Header title="List of Users" />
             <hr />
             <form action="" onSubmit={() => { handleSearch() }}>
                 <input type="search" placeholder="Search users..." />

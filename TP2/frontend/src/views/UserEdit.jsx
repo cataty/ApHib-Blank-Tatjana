@@ -82,7 +82,7 @@ function UserEdit() {
         const formData = new FormData();
         formData.append('name', user.name);
         formData.append('email', user.email);
-        if (user.passwordNew){
+        if (user.passwordNew) {
             formData.append('password', user.passwordNew);
         }
         if (file) {
@@ -124,12 +124,13 @@ function UserEdit() {
 
     return (
         <>
-            <Header title={`Edit User Data: ${username}`} />
             {message.text && ( // Display message if it exists
                 <div className={`message ${message.type}`}>
                     {message.text}
                 </div>
             )}
+            <Header title={`Edit User Data: ${username}`} />
+
             <form encType="multipart/form-data" onSubmit={putUser}>
                 <label htmlFor="name">Name</label>
                 <input
@@ -168,7 +169,7 @@ function UserEdit() {
                     value={user.passwordNew}
                     onChange={handleChange}
                 />
-                                <label htmlFor="passwordRepeat">Repeat Password</label>
+                <label htmlFor="passwordRepeat">Repeat Password</label>
                 <input
                     type="password"
                     id="passwordRepeat"

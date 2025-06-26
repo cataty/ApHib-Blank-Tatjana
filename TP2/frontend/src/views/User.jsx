@@ -49,12 +49,18 @@ function User() {
             <Header title={`User profile: ${username}`} />
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <div className="user-details">
-                <h2>{user.name}</h2>
-                {user.avatar && (
-                    <img src={`${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="User avatar" />
-                )}
+                <div className="user-img">
+                <img
+                    src={
+                        user.avatar
+                            ? `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`
+                            : '/path/to/placeholder.png'
+                    }
+                    alt="User avatar"
+                />
+                </div>
                 <p><strong>Email:</strong> {user.email}</p>
-                                                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit user data</button>
+                <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit user data</button>
             </div>
         </>
     )

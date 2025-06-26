@@ -6,7 +6,8 @@ import Header from '../components/Header'
 function CocktailCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '' });
+    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
+    const [file, setFile] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
@@ -15,13 +16,28 @@ function CocktailCreate() {
         setMessage({ ...message, text: "" });
     }
 
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
+    }
+
     function handleFocus(event) {
         setMessage({ ...message, text: "" });
     }
 
     async function postCocktail(event) {
         event.preventDefault();
-        console.log(cocktail)
+        console.log(cocktail);
+
+        const ingredientsArray = cocktail.ingredients
+            .split(',')
+            .map(item => {
+                const parts = item.trim().split(' ');
+                const amount = parts[0] || '';
+                const unit = parts[1] || '';
+                const ingredient = parts.slice(2).join(' ') || '';
+                return { amount, unit, ingredient };
+            })
+            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
 
         // Validations
         if (cocktail.name.trim().length < 3) {
@@ -60,28 +76,31 @@ function CocktailCreate() {
             setMessage({ ...message, text: 'Please complete the Preparation instructions field.' });
             return;
         }
+        if (!Array.isArray(ingredientsArray)) {
+            setMessage({ ...message, text: 'Ingredients must be an array.' });
+            return;
+        }
+
 
         // If all validations pass, proceed to post the cocktail
-
-        const ingredientsArray = cocktail.ingredients
-            .split(',')
-            .map(item => item.trim())
-            .filter(item => item.length > 0);
+        const formData = new FormData();
+        formData.append('name', cocktail.name);
+        formData.append('category', cocktail.category);
+        formData.append('glass', cocktail.glass);
+        formData.append('ingredients', JSON.stringify(ingredientsArray));
+        formData.append('garnish', cocktail.garnish);
+        formData.append('preparation', cocktail.preparation);
+        if (file) {
+            formData.append('file', file);
+        };
 
         const options = {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+
             },
-            body: JSON.stringify({
-                name: cocktail.name,
-                category: cocktail.category,
-                glass: cocktail.glass,
-                ingredients: ingredientsArray,
-                garnish: cocktail.garnish,
-                preparation: cocktail.preparation
-            }),
+            body: formData,
             // TODO: validate input, change error message language
         };
         try {
@@ -92,7 +111,7 @@ function CocktailCreate() {
                 navigate('/cocktails', { state: { message: { text: "Cocktail created successfully!", type: "success" } } });
             } else {
                 const { error } = await response.json();
-                setMessage({...message, text: error})
+                setMessage({ ...message, text: error })
                 return;
             }
 
@@ -103,15 +122,15 @@ function CocktailCreate() {
     }
 
     return (
-        <>
+        <>            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
+            <div className={`message ${message.type}`}>
+                {message.text}
+            </div>
+        )}
+
             <Header title="Create Cocktail" />
             <p>Fill in the form below to create a new cocktail.</p>
 
-            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
 
             <form action="" onSubmit={postCocktail}>
                 <h2>Add a new Cocktail</h2>
@@ -178,7 +197,13 @@ function CocktailCreate() {
                     onFocus={handleFocus}
                     required
                 />
-
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
                 <button type="submit">Add Cocktail</button>
             </form>
         </>

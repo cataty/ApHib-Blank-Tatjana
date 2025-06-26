@@ -1,4 +1,4 @@
-const uploadContoller = (request, response) => {
+const uploadController = (request, response) => {
     try {
         if (request.file) {
             return response.status(200).json({
@@ -15,4 +15,4 @@ const uploadContoller = (request, response) => {
         }
     }
 
-export { uploadContoller };
+export { uploadController };

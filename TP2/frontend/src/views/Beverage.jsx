@@ -37,21 +37,22 @@ function Beverage() {
     return (
         <>
             <Header title={beverage.name} />
-            <div className="beverage-details">
-                <h2>{beverage.name}</h2>
+            <div className="drink-details">
+                <div className="drink-image">
+                    <img
+                        src={
+                            beverage.image
+                                ? `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`
+                                : '/img/cocktail_placeholder_2.png'
+                        }
+                        alt="beverage placeholder"
+                    /></div>
                 <p><strong>Category:</strong> {beverage.category}</p>
                 <p><strong>Alcoholic:</strong> {beverage.alcoholic ? "Yes" : "No"}</p>
                 {beverage.alcoholic && (
                     <p><strong>Alcohol Content:</strong> {beverage.alcoholContent}%</p>
                 )}
                 <p><strong>Description:</strong> {beverage.description}</p>
-                {beverage.image && (
-                    <img
-                        src={beverage.image}
-                        alt={beverage.name}
-                        style={{ maxWidth: "300px", marginTop: "1em" }}
-                    />
-                )}
             </div>
         </>
     )

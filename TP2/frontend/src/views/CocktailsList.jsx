@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, use } from "react"
 import { useLocation } from "react-router-dom";
 import ListItem from '../components/ListItem'
 import Header from '../components/Header'
+import Accordion from "../components/Accordion";
 
 function CocktailsList() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -9,6 +10,7 @@ function CocktailsList() {
     const [categories, setCategories] = useState([]);
     const [glasses, setGlasses] = useState([]);
     const [searchParams, setSearchParams] = useState({ _id: '', name: '', category: '', glass: '' });
+    const [refresh, setRefresh] = useState(false);
     const location = useLocation();
     const message = location.state?.message;
 
@@ -36,7 +38,11 @@ function CocktailsList() {
         getCocktails();
         getCategories();
         getGlasses();
-    }, []);
+    }, [refresh]);
+
+  function handleRefresh() {
+        setRefresh(prev => !prev); // Toggle to trigger useEffect
+}
 
     function handleChange(event) {
         setSearchParams({ ...searchParams, [event.target.name]: event.target.value })
@@ -88,27 +94,12 @@ function CocktailsList() {
         }
     }
 
-    async function searchCocktailsByCategory(event) {
-        event.preventDefault();
-        try {
-            const response = await fetch(`${API_URL}cocktails/categories/${searchParams.category}`);
-            if (response.ok) {
-                const { data } = await response.json();
-                setCocktails(data);
-            } else {
-                alert('Something went wrong fetching cocktails by category');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Error fetching cocktails by category');
-        }
-    }
-
-    async function searchCocktailsByCategoryLink(category) {
+    async function searchCocktailsByCategory(category) {
         try {
             const response = await fetch(`${API_URL}cocktails/categories/${category}`);
             if (response.ok) {
                 const { data } = await response.json();
+                console.log(data);
                 setCocktails(data);
             } else {
                 alert('Something went wrong fetching cocktails by category');
@@ -119,23 +110,7 @@ function CocktailsList() {
         }
     }
 
-    async function searchCocktailsByGlass(event) {
-        event.preventDefault();
-        try {
-            const response = await fetch(`${API_URL}cocktails/categories/${searchParams.glass}`);
-            if (response.ok) {
-                const { data } = await response.json();
-                setCocktails(data);
-            } else {
-                alert('Something went wrong fetching cocktails by glass');
-            }
-        } catch (error) {
-            console.error(error);
-            alert('Error fetching cocktails by glass');
-        }
-    }
-
-    async function searchCocktailsByGlassLink(glass) {
+    async function searchCocktailsByGlass(glass) {
         try {
             const response = await fetch(`${API_URL}cocktails/glasses/${glass}`);
             if (response.ok) {
@@ -149,10 +124,14 @@ function CocktailsList() {
             alert('Error fetching cocktails by glass');
         }
     }
+
+    if (loading) return <p>Loading...</p>;
+
     return (
         <>
-            <Header>List of Cocktails</Header>
-            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+                    {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            <Header title="List of Cocktails" />
+
             <form action="" onSubmit={searchCocktailByName}>
                 <h2>Search for a Cocktail</h2>
                 <label htmlFor="searchName">Type in a name to search for it</label>
@@ -166,74 +145,57 @@ function CocktailsList() {
                 <button type="submit">Search</button>
             </form>
 
-{/*             <form onSubmit={searchCocktailsByCategory}>
-                <h2>Filter by Category</h2>
-                <select name="category" onChange={handleChange}>
-                    <option value="">All Categories</option>
+ <Accordion title="Filter by Category">
+                <ul className="filter-list">
+                    <li>
+                        <a href="#" onClick={e => { e.preventDefault(); getCocktails(); }}>
+                            All Categories
+                        </a>
+                    </li>
                     {categories.map(category => (
-                        <option key={category} value={category}>{category}</option>
+                        <li key={category}>
+                            <a
+                                href="#"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    searchCocktailsByCategory(category);
+                                }}
+                            >
+                                {category}
+                            </a>
+                        </li>
                     ))}
-                </select>
-                <button type="submit">Filter</button>
-            </form>
+                </ul>
+            </Accordion>
 
-            <form onSubmit={searchCocktailsByGlass}>
-                <h2>Filter by Glass</h2>
-                <select name="glass" onChange={handleChange}>
-                    <option value="">All Glasses</option>
+            <Accordion title="Filter by Glass">
+                <ul className="filter-list">
+                    <li>
+                        <a href="#" onClick={e => { e.preventDefault(); getCocktails(); }}>
+                            All Glasses
+                        </a>
+                    </li>
                     {glasses.map(glass => (
-                        <option key={glass} value={glass}>{glass}</option>
+                        <li key={glass}>
+                            <a
+                                href="#"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    searchCocktailsByGlass(glass);
+                                }}
+                            >
+                                {glass}
+                            </a>
+                        </li>
                     ))}
-                </select>
-                <button type="submit">Filter</button>
-            </form> */}
+                </ul>
+            </Accordion>
 
-            <h2>Filter by Category</h2>
-            <ul className="filter-list">
-                <li>
-                    <a href="#" onClick={e => { e.preventDefault(); getCocktails(); }}>
-                        All Categories
-                    </a>
-                </li>
-                {categories.map(category => (
-                    <li key={category}>
-                        <a
-                            href="#"
-                            onClick={e => {
-                                e.preventDefault();
-                                searchCocktailsByCategoryLink(category);
-                            }}
-                        >
-                            {category}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-            <h2>Filter by Glass</h2>
-            <ul className="filter-list">
-                <li>
-                    <a href="#" onClick={e => { e.preventDefault(); getCocktails(); }}>
-                        All Glasses
-                    </a>
-                </li>
-                {glasses.map(glass => (
-                    <li key={glass}>
-                        <a
-                            href="#"
-                            onClick={e => {
-                                e.preventDefault();
-                                searchCocktailsByGlassLink(glass);
-                            }}
-                        >
-                            {glass}
-                        </a>
-                    </li>
-                ))}
-            </ul>
             <h2>Cocktails</h2>
             <ul>
                 {cocktails.map(cocktail => (
                     <ListItem
+                        onRefresh={handleRefresh}
                         key={cocktail._id}
                         id={cocktail._id}
                         name={cocktail.name}

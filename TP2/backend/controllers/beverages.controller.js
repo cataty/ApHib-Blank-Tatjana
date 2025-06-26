@@ -50,18 +50,21 @@ const getBeverageById = async (request, response) => {
 }
 
 const getBeverageByName = async (request, response) => {
+    console.log(request.query);
     try {
-        const { name } = request.params;
+        const { name } = request.query;
+        console.log(name);
         const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-        const beverage = await Beverage.find({ name: cleanedName });
-        if (Beverage.length > 0) {
-            response.status(200).json({ msg: "OK", data: beverage });
-        } else {
-            response.status(404).json({ error: 'Drink not found', data: beverage });
+        const beverages = await Beverage.find({ name: cleanedName });
+        if (!beverages || beverages.length == 0) {
+            response.status(404).json({ error: 'Beverages not found', data: beverages });
+        }
+        else {
+            response.status(200).json({ msg: "OK", data: beverages });
         }
     } catch (error) {
         console.error({ error });
-        response.status(500).json({ error: 'Error del servidor' });
+        response.status(500).json({ error: 'Server errror', data: request.params });
     }
 }
 
@@ -84,8 +87,8 @@ const updateBeverageById = async (request, response) => {
     try {
         const { id } = request.params;
         const beverage = request.body;
-        const updatedBeverage = await Beverage.findByIdAndUpdate(id);
-        if (beverage) {
+    const updatedBeverage = await Beverage.findByIdAndUpdate(id, request.body, { new: true });
+        if (updatedBeverage) {
             response.status(200).json({ msg: 'Drink updated', data: updatedBeverage });
         } else {
             response.status(404).json({ error: 'Drink not found', data: beverage });
