@@ -94,6 +94,8 @@ function CocktailCreate() {
             formData.append('file', file);
         };
 
+                console.log(formData);
+                
         const options = {
             method: 'POST',
             headers: {

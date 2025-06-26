@@ -62,7 +62,7 @@ function ListItem({ id, name, image, onRefresh }) {
 
     return (
         <li className="drink-list-item">
-            <img src={image ? image : '/img/cocktail_placeholder_1.png'} alt={name} />
+            <img src={image ? `${API_URL.replace(/\/api\/?$/, '/')}${image}` : '/img/cocktail_placeholder_1.png'} alt={name} />
             <NavLink to={`/${itemType}s/${id}`}><h3> {name}</h3></NavLink>
 
             <Routes>

@@ -2,11 +2,14 @@ import { useState, useEffect, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Header from '../components/Header'
+import ListItem from '../components/ListItem';
 
 function UsersList() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
     const [users, setUsers] = useState([]);
+    const [searchParams, setSearchParams] = useState({ _id: '', name: '', email: '' });
+    const [refresh, setRefresh] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const message = location.state?.message;
@@ -51,84 +54,96 @@ function UsersList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         getUsers();
-    }, []);
+    }, [refresh]);
 
 
-    async function handleSearch(event) {
-        event.preventDefault();
+    function handleRefresh() {
+        setRefresh(prev => !prev); // Toggle to trigger useEffect
     }
 
-    async function deleteUser(id) {
-        alert('Are you sure you want to delete this user?');
-        if (!window.confirm('Are you sure you want to delete this user?')) {
-            return;
-        }
-        const options = {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        }
-        try {
-            const response = await fetch(`${API_URL}users/${id}`, options);
+    function handleChange(event) {
+        setSearchParams({ ...searchParams, [event.target.name]: event.target.value })
+    }
 
+    async function searchUserByName(event) {
+        event.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}users/search/name?name=${searchParams.name}`);
             if (response.ok) {
                 const { data } = await response.json();
-                getUsers();
+                setUsers(data);
             } else {
-                alert('Something went wrong deleting the user');
+                alert('Something went wrong fetching the user by name');
             }
         } catch (error) {
             console.error(error);
-            console.log('Error deleting the user');
+            alert('Error fetching user by name');
         }
     }
 
-    if (loading) return <p>Loading...</p>;
+async function deleteUser(id) {
+    alert('Are you sure you want to delete this user?');
+    if (!window.confirm('Are you sure you want to delete this user?')) {
+        return;
+    }
+    const options = {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    }
+    try {
+        const response = await fetch(`${API_URL}users/${id}`, options);
 
-    return (
-        <>            
-            {message && <div className={`message ${message.type}`}>{message.text}</div>}
-            <Header title="List of Users" />
-            <hr />
-            <form action="" onSubmit={() => { handleSearch() }}>
-                <input type="search" placeholder="Search users..." />
+        if (response.ok) {
+            const { data } = await response.json();
+            getUsers();
+        } else {
+            alert('Something went wrong deleting the user');
+        }
+    } catch (error) {
+        console.error(error);
+        console.log('Error deleting the user');
+    }
+}
+
+if (loading) return <p>Loading...</p>;
+
+return (
+    <>
+        {message && <div className={`message ${message.type}`}>{message.text}</div>}
+        <Header title="List of Users" />
+        <hr />
+        <form action="" onSubmit={() => { searchUserByName() }}>
+              <label htmlFor="searchName">Type in a name to search for it</label>
+                <input
+                    type="text"
+                    name="name"
+                    id="searchName"
+                    placeholder="Search by name"
+                    onChange={handleChange}
+                />
                 <button type="submit">Search</button>
-            </form>
+        </form>
 
-            <button onClick={() => navigate('/users/create')}>
-                Create User
-            </button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        users.map(user =>
-                            <tr key={user._id}>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>
-                                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>edit</button>
-                                    <button
-                                        type="button"
-                                        onClick={() => deleteUser(user._id)}
-                                    >delete</button>
-                                </td>
-                            </tr>
-                        )
-                    }
-                </tbody>
-            </table>
-
-        </>
-    )
+        <button onClick={() => navigate('/users/create')}>
+            Create User
+        </button>
+        <ul>
+            {users.map(user => (
+                <ListItem
+                    onRefresh={handleRefresh}
+                    key={user._id}
+                    id={user._id}
+                    name={user.name}
+                    email={user.email}
+                    image={user.avatar}
+                />
+            ))}
+        </ul>
+    </>
+)
 }
 
 export default UsersList

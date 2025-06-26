@@ -89,6 +89,8 @@ function UserEdit() {
             formData.append('file', file);
         }
 
+        console.log(formData);
+
         const options = {
             method: 'PUT',
             headers: {

@@ -43,6 +43,7 @@ function BeverageEdit() {
         const beverageToSend = {
             ...beverage,
             alcoholic: beverage.alcoholic === "true" ? true : false,
+            alcoholContent: beverage.alcoholContent ? parseFloat(beverage.alcoholContent) : null
         };
 
         // Validations

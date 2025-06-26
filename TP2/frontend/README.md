@@ -1,70 +1,60 @@
-# Getting Started with Create React App
+Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the React frontend for the Cocktails and Beverages Database app. It allows users to browse, create, edit, and delete cocktails, beverages, and users. Authenticated users can add and manage their own entries.
 
-## Available Scripts
+Getting Started
 
-In the project directory, you can run:
+Prerequisites
 
-### `npm start`
+Node.js (v18+ recommended)
+npm (v9+ recommended)
+The backend API running (see backend documentation)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Installation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clone the repository and navigate to the frontend folder:
 
-### `npm test`
+git clone <your-repo-url>
+cd Repo/TP2/frontend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Install dependencies:
 
-### `npm run build`
+npm install
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Create a .env file in the frontend directory:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+REACT_APP_API_URL="http://127.0.0.1:5000/api/"
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Adjust the URL if your backend runs elsewhere.
 
-### `npm run eject`
+4. Start the development server:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+npm start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The app will be available at http://localhost:3000.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Scripts
+npm start – Runs the app in development mode.
+npm run build – Builds the app for production.
+npm test – Runs tests.
+Features
+Browse, search, create, edit, and delete cocktails and beverages.
+User authentication and protected routes.
+Image upload for cocktails and users.
+Responsive design.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Project Structure:
 
-## Learn More
+src/
+  components/      # Reusable UI components
+  context/         # React context for authentication
+  views/           # Page components (CocktailCreate, CocktailEdit, etc.)
+  App.jsx          # Main app component and routes
+  index.js         # Entry point
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Environment Variables
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+REACT_APP_API_URL – The base URL for the backend API.
+Notes
+Make sure the backend is running and accessible at the URL specified in .env.
+For image uploads, the backend must serve the /uploads directory.

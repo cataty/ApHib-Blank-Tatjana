@@ -7,7 +7,7 @@ function CocktailEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
     const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
-    const [cocktailName, setCocktailName] = useState('');
+    const [file, setFile] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
     const { id } = useParams();
@@ -15,6 +15,10 @@ function CocktailEdit() {
 
     function handleChange(event) {
         setCocktail({ ...cocktail, [event.target.name]: event.target.value })
+    }
+
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
     }
 
     function handleIngredientsChange(event) {
@@ -216,6 +220,19 @@ function CocktailEdit() {
                     id="preparation"
                     onFocus={handleFocus}
                     onChange={handleChange}
+                />
+
+                {cocktail.image && (
+                    <img src={`${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Uploaded image" />
+                )}
+
+                <label htmlFor="file">Cocktail image</label>
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
                 />
 
                 <button type="submit">Save Cocktail</button>
