@@ -34,6 +34,7 @@ function ListItem({ id, name, image, onRefresh }) {
     }
 
     async function onDelete(id) {
+        console.log(`Deleting ${itemType} with id: ${id}`);
         if (!window.confirm(`Are you sure you want to delete this ${itemType}?`)) {
             return;
         }

@@ -6,7 +6,9 @@ import Header from '../components/Header'
 function BeverageCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [beverage, setBeverage] = useState({ name: '', category: '', alcoholic: '', alcoholContent: '' });
+    const [beverage, setBeverage] = useState({ name: '', category: '', alcoholic: '', alcoholContent: '', image: '' });
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
@@ -15,17 +17,24 @@ function BeverageCreate() {
         setMessage({ ...message, text: "" });
     }
 
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
+    }
+
     function handleFocus(event) {
         setMessage({ ...message, text: "" });
     }
 
     async function postBeverage(event) {
         event.preventDefault();
-    const beverageToSend = {
-        ...beverage,
-        alcoholic: beverage.alcoholic === "true" ? true : false,
-        alcoholContent: beverage.alcoholContent ? parseFloat(beverage.alcoholContent) : null
-    };
+        const beverageToSend = {
+            ...beverage,
+            alcoholic: beverage.alcoholic === "true" ? true : false,
+            alcoholContent: beverage.alcoholContent ? parseFloat(beverage.alcoholContent) : 0
+        };
         // Validations
         if (beverageToSend.name.trim().length < 3) {
             setMessage({ ...message, text: 'Beverage name cannot be less than 3 caracters. Please check your input.' });
@@ -35,9 +44,18 @@ function BeverageCreate() {
             setMessage({ ...message, text: 'Please complete the category field.' });
             return;
         }
-        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent.trim() === '') {
+        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent === null) {
             setMessage({ ...message, text: 'Please complete the alcohol content field.' });
             return;
+        }
+
+        const formData = new FormData();
+        formData.append('name', beverageToSend.name);
+        formData.append('category', beverageToSend.category);
+        formData.append('alcoholic', beverageToSend.alcoholic);
+        formData.append('alcoholContent', beverageToSend.alcoholContent);
+        if (file) {
+            formData.append('file', file);
         }
 
         // If all validations pass, proceed to post the beverage
@@ -45,11 +63,11 @@ function BeverageCreate() {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(beverageToSend),
+            body: formData,
 
         }
+
         console.log(beverage);
         try {
             const response = await fetch(`${API_URL}beverages`, options);
@@ -58,14 +76,20 @@ function BeverageCreate() {
                 const { data } = await response.json();
                 navigate('/beverages', { state: { message: { text: "Beverage created successfully!", type: "success" } } });
             } else {
-                const { error } = await response.json();
-                setMessage({...message, text: error})
+                let errorMsg = "Unknown error";
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.error?.message || errorData.error || JSON.stringify(errorData);
+                } catch (e) {
+                    errorMsg = await response.text();
+                }
+                setMessage({ ...message, text: errorMsg });
                 return;
             }
 
         } catch (error) {
             console.error(error);
-            setMessage({...message, text: error})
+            setMessage({ ...message, text: error.message })
         }
     }
 
@@ -102,11 +126,11 @@ function BeverageCreate() {
                     required
                 />
                 <div>
-                <label htmlFor="alcoholic">
- 
-                    Alcoholic
-                </label>
-                                   <input
+                    <label htmlFor="alcoholic">
+
+                        Alcoholic
+                    </label>
+                    <input
                         type="radio"
                         name="alcoholic"
                         value="true"
@@ -114,11 +138,11 @@ function BeverageCreate() {
                         onChange={handleChange}
                         onFocus={handleFocus}
                     />
-                <label htmlFor="alcoholic">
-  
-                    Non-Alcoholic
-                </label>
-                <input
+                    <label htmlFor="alcoholic">
+
+                        Non-Alcoholic
+                    </label>
+                    <input
                         type="radio"
                         name="alcoholic"
                         value="false"
@@ -136,6 +160,19 @@ function BeverageCreate() {
                     onChange={handleChange}
                     onFocus={handleFocus}
                 />
+
+                <label htmlFor="file">Beverage image</label>
+                {preview && (
+                    <img src={preview} alt="Beverage image" />
+                )}
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
+
                 <button type="submit">Add Beverage</button>
             </form>
         </>

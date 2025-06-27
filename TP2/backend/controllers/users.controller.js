@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
 
 dotenv.config(); // Load environment variables from .env file
 const secret_key = process.env.SECRET_KEY; // Get the secret key from environment variables
@@ -31,6 +33,11 @@ const getUsers = async (request, response) => {
 }
 
 const setUser = async (request, response) => {
+
+        if (request.file) {
+            request.body.avatar ='uploads/' + request.file.filename;
+        }
+
     try {
         const { name, email, password } = request.body;
 
@@ -76,6 +83,14 @@ const deleteUserById = async (request, response) => {
         const { id } = request.params;
         const user = await User.findByIdAndDelete(id);
         if (user) {
+            if (user.avatar) {
+                const imagePath = path.join(process.cwd(), user.avatar);
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.error("Error deleting image:", err);
+                    }
+                });
+            }
             response.status(200).json({ msg: 'User deleted', data: user });
         } else {
             response.status(404).json({ error: 'User not found', data: user });
@@ -99,7 +114,7 @@ const updateUserById = async (request, response) => {
         }
 
         if (request.file) {
-            user.avatar = request.file.path;
+            user.avatar ='uploads/' + request.file.filename;
         }
 
         const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });

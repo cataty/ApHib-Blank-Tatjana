@@ -73,13 +73,7 @@ function Cocktail() {
                     )}
                 </ul>
                 <p><strong>Preparation: </strong> {cocktail.preparation}</p>
-                {cocktail.image && (
-                    <img
-                        src={cocktail.image}
-                        alt={cocktail.name}
-                        style={{ maxWidth: "300px", marginTop: "1em" }}
-                    />
-                )}
+
             </div>
         </>
     );

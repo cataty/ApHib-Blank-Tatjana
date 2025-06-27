@@ -1,14 +1,16 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '../components/Header'
 
 function UserCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
     const [user, setUser] = useState({ name: '', email: '', password: '', passwordRepeat: '' });
-    const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
+    const location = useLocation();
+    const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
+
 
     function handleChange(event) {
         setUser({ ...user, [event.target.name]: event.target.value });
@@ -79,14 +81,17 @@ function UserCreate() {
 
     return (
         <>
-            <Header title="Create User" />
-            <p>Fill in the form below to create a new user.</p>
 
             {message.text && ( // Display message if it exists
                 <div className={`message ${message.type}`}>
                     {message.text}
                 </div>
             )}
+
+            <Header title="Create User" />
+            <p>Fill in the form below to create a new user.</p>
+
+  
 
             <form enctype="multipart/form-data" onSubmit={postUser}>
                 <label htmlFor="name">Name</label>

@@ -8,6 +8,7 @@ function UserEdit() {
     const { user: authUser, token, isAdmin } = useContext(AuthContext);
     const [user, setUser] = useState({ _id: '', name: '', email: '', password: '', avatar: '', passwordNew: '' });
     const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [username, setUsername] = useState('');
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
@@ -22,6 +23,9 @@ function UserEdit() {
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
+        if(event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     async function getUser(id) {
@@ -112,7 +116,7 @@ function UserEdit() {
 
             } else {
                 const { error } = await response.json();
-                alert('Something went wrong during registration: ' + error);
+                alert('Something went wrong during user update: ' + error);
                 return;
             }
 
@@ -144,7 +148,7 @@ function UserEdit() {
                     onChange={handleChange}
                 />
                 {user.avatar && (
-                    <img src={`${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="Uploaded avatar" />
+                    <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="User avatar" />
                 )}
                 <label htmlFor="file">Avatar</label>
                 <input

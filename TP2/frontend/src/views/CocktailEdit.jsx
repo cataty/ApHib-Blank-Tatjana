@@ -8,6 +8,7 @@ function CocktailEdit() {
     const { token } = useContext(AuthContext);
     const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
     const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
     const { id } = useParams();
@@ -19,6 +20,9 @@ function CocktailEdit() {
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     function handleIngredientsChange(event) {
@@ -56,17 +60,22 @@ function CocktailEdit() {
     async function putCocktail(event) {
         event.preventDefault();
         console.log(cocktail)
+        let ingredientsArray;
 
-        const ingredientsArray = cocktail.ingredients
-            .split(',')
-            .map(item => {
-                const parts = item.trim().split(' ');
-                const amount = parts[0] || '';
-                const unit = parts[1] || '';
-                const ingredient = parts.slice(2).join(' ') || '';
-                return { amount, unit, ingredient };
-            })
-            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
+        if (!Array.isArray(cocktail.ingredients)) {
+            ingredientsArray = cocktail.ingredients
+                .split(',')
+                .map(item => {
+                    const parts = item.trim().split(' ');
+                    const amount = parts[0] || '';
+                    const unit = parts[1] || '';
+                    const ingredient = parts.slice(2).join(' ') || '';
+                    return { amount, unit, ingredient };
+                })
+                .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if 
+        } else {
+            ingredientsArray = cocktail.ingredients;
+        }
 
         // Validations
         if (cocktail.name.trim().length < 3) {
@@ -89,14 +98,6 @@ function CocktailEdit() {
             setMessage({ ...message, text: 'Please complete the Glass field.' });
             return;
         }
-        if (cocktail.ingredients.trim() === '') {
-            setMessage({ ...message, text: 'Please complete the Ingredients field.' });
-            return;
-        }
-        if (!cocktail.ingredients.trim().includes(',')) {
-            setMessage({ ...message, text: 'Invalid ingredient format. The ingredients should be separated by a comma.' });
-            return;
-        }
         if (cocktail.preparation.trim().length < 10) {
             setMessage({ ...message, text: 'Cocktail preparation cannot be less than 10 characters. Please check your input.' });
             return;
@@ -111,26 +112,29 @@ function CocktailEdit() {
         }
 
         // If all validations pass, proceed to post the cocktail
+       const formData = new FormData();
+        formData.append('name', cocktail.name);
+        formData.append('category', cocktail.category);
+        formData.append('glass', cocktail.glass);
+        formData.append('ingredients', JSON.stringify(ingredientsArray));
+        formData.append('garnish', cocktail.garnish);
+        formData.append('preparation', cocktail.preparation);
+        if (file) {
+            formData.append('file', file);
+        };
 
+                console.log(formData);
 
         const options = {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                name: cocktail.name,
-                category: cocktail.category,
-                glass: cocktail.glass,
-                ingredients: ingredientsArray,
-                garnish: cocktail.garnish,
-                preparation: cocktail.preparation
-            }),
-            // TODO: validate input, change error message language
+            body: formData,
         };
+
         try {
-            const response = await fetch(`${API_URL}cocktails/${id}`, options); // TODO: validate input, change error msg language
+            const response = await fetch(`${API_URL}cocktails/${id}`, options);
 
             if (response.ok) {
                 const { data } = await response.json();
@@ -150,10 +154,10 @@ function CocktailEdit() {
 
     return (
         <>            {message.text && ( // Display message if it exists
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
+            <div className={`message ${message.type}`}>
+                {message.text}
+            </div>
+        )}
             <Header title={`Edit Cocktail Data: ${cocktail.name}`} />
 
             <form action="" onSubmit={putCocktail}>
@@ -221,12 +225,10 @@ function CocktailEdit() {
                     onFocus={handleFocus}
                     onChange={handleChange}
                 />
-
-                {cocktail.image && (
-                    <img src={`${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Uploaded image" />
-                )}
-
                 <label htmlFor="file">Cocktail image</label>
+
+                <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Cocktail image" />
+
                 <input
                     type="file"
                     id="file"

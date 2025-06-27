@@ -1,5 +1,6 @@
 import Cocktail from "../models/cocktail.model.js";
-import upload from "../middleware/imgUpload.js";
+import path from "path";
+import fs from "fs";
 
 // const cocktailModel = new CocktailsManager;
 
@@ -15,8 +16,10 @@ const getCocktails = async (request, response) => {
 
 const setCocktail = async (request, response) => {
     try {
+        if (request.file) {
+           request.body.image = 'uploads/' + request.file.filename; // Use the path from the uploaded file
+        }
         const cocktail = request.body;
-
         if (await Cocktail.findOne({ name: cocktail.name })) {
             return response.status(400).json({ error: 'A cocktail with this name already exists' });
         } else {
@@ -61,6 +64,14 @@ const deleteCocktailById = async (request, response) => {
         const { id } = request.params;
         const cocktail = await Cocktail.findByIdAndDelete(id);
         if (cocktail) {
+            if (cocktail.image) {
+                const imagePath = path.join(process.cwd(), cocktail.image);
+                fs.unlink(imagePath, (error) => {
+                    if (error) {
+                        console.error("Error deleting image:", err);
+                    }
+                });
+            }
             response.status(200).json({ msg: 'Cocktail eliminado', data: cocktail });
         } else {
             response.status(404).json({ error: 'Cocktail not found', data: cocktail });
@@ -77,6 +88,9 @@ const updateCocktailById = async (request, response) => {
         const cocktail = request.body;
         if (typeof request.body.ingredients === 'string') {
             request.body.ingredients = JSON.parse(request.body.ingredients);
+        }
+        if (request.file) {
+            request.body.image = 'uploads/' + request.file.filename; // Use the path from the uploaded file
         }
         const updatedCocktail = await Cocktail.findByIdAndUpdate(id, cocktail);
         if (updatedCocktail) {

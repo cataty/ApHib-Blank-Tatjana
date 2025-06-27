@@ -15,7 +15,9 @@ const beverageSchema = new Schema({
         required: true,
     },
     alcoholContent: { type: Number,
+        default: null
     },
+    image: { type: String, default: "" },
  });
 
 const Beverage = mongoose.model("beverage", beverageSchema);

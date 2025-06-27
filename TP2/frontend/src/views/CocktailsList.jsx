@@ -131,6 +131,7 @@ function CocktailsList() {
         <>
                     {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <Header title="List of Cocktails" />
+                    <hr />
 
             <form action="" onSubmit={searchCocktailByName}>
                 <h2>Search for a Cocktail</h2>

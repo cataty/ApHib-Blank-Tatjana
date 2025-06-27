@@ -29,7 +29,7 @@ const cocktailSchema = new Schema({
         required: true,
         minlength: 3,
     },
-    image: String,
+    image: { type: String, default: "" },
 });
 
 const Cocktail = mongoose.model("cocktail", cocktailSchema);

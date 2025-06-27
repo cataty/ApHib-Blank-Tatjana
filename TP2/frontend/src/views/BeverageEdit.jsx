@@ -6,14 +6,23 @@ import Header from '../components/Header'
 function BeverageEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '' });
+    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '', image: ''});
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const navigate = useNavigate();
     const { id } = useParams();
     const [loading, setLoading] = useState(true);
 
     function handleChange(event) {
         setBeverage({ ...beverage, [event.target.name]: event.target.value })
+    }
+
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     async function getBeverage(id) {
@@ -43,7 +52,7 @@ function BeverageEdit() {
         const beverageToSend = {
             ...beverage,
             alcoholic: beverage.alcoholic === "true" ? true : false,
-            alcoholContent: beverage.alcoholContent ? parseFloat(beverage.alcoholContent) : null
+            alcoholContent: beverage.alcoholContent ? parseFloat(beverage.alcoholContent) : 0
         };
 
         // Validations
@@ -55,19 +64,28 @@ function BeverageEdit() {
             setMessage({ ...message, text: 'Please complete the category field.' });
             return;
         }
-        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent.trim() === '') {
+        if (beverageToSend.alcoholic === true && beverageToSend.alcoholContent === null) {
             setMessage({ ...message, text: 'Please complete the alcohol content field.' });
             return;
         }
 
-        // If all validations pass, proceed to post the beverag
+        // If all validations pass, proceed to post the beverage
+
+        const formData = new FormData();
+        formData.append('name', beverageToSend.name);
+        formData.append('category', beverageToSend.category);
+        formData.append('alcoholic', beverageToSend.alcoholic);
+        formData.append('alcoholContent', beverageToSend.alcoholContent);
+        if (file) {
+            formData.append('file', file);
+        }
+
         const options = {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(beverageToSend),
+            body: formData,
         }
 
         try {
@@ -141,6 +159,19 @@ function BeverageEdit() {
                     value={beverage.alcoholContent}
                     onChange={handleChange}
                 />
+
+                <label htmlFor="file">Beverage image</label>
+
+                <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`} alt="Beverage image" />
+
+                <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
+
                 <button type="submit">Save Beverage</button>
             </form>
         </>

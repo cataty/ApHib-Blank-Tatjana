@@ -14,6 +14,10 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    if(location.state?.message) {
+        setMessage({ ...message, ...location.state.message });
+    }
+
     function handleChange(event) {
         setUser({ ...user, [event.target.name]: event.target.value })
     }
@@ -71,7 +75,7 @@ function Login() {
 
     return (
         <>
-            <Header>Login</Header>
+            <Header title="Login" />
             {message.text && ( // Display message if it exists
                 <div className={`message ${message.type}`}>
                     {message.text}

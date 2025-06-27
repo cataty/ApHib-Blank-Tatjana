@@ -1,5 +1,6 @@
 import Beverage from "../models/beverage.model.js";
-
+import path from "path";
+import fs from "fs";
 
 // const BeverageModel = new BeveragesManager;
 
@@ -14,6 +15,10 @@ const getBeverages = async (request, response) => {
 }
 
 const setBeverage = async (request, response) => {
+
+    if (request.file) {
+      request.body.image = 'uploads/' + request.file.filename; // Use the path from the uploaded file
+    }
     try {
         const beverage = request.body;
 
@@ -22,7 +27,7 @@ const setBeverage = async (request, response) => {
         } else {
 
             const newBeverage = new Beverage(beverage);
-            newBeverage.save();
+            await newBeverage.save();
 
             const id = newBeverage._id;
 
@@ -73,6 +78,14 @@ const deleteBeverageById = async (request, response) => {
         const { id } = request.params;
         const beverage = await Beverage.findByIdAndDelete(id);
         if (beverage) {
+            if (beverage.image){
+                const imagePath = path.join(process.cwd(), beverage.image);
+                fs.unlink(imagePath, (error) => {
+                    if (error) {
+                        console.error("Error deleting image:", err);
+                    }
+                });
+            }
             response.status(200).json({ msg: 'Drink deleted', data: beverage });
         } else {
             response.status(404).json({ error: 'Drink not found', data: beverage });
@@ -84,10 +97,15 @@ const deleteBeverageById = async (request, response) => {
 }
 
 const updateBeverageById = async (request, response) => {
+    if (request.file) {
+       request.body.image = 'uploads/' + request.file.filename; // Use the path from the uploaded file
+    }
     try {
         const { id } = request.params;
         const beverage = request.body;
-    const updatedBeverage = await Beverage.findByIdAndUpdate(id, request.body, { new: true });
+        console.log("BODY:", request.body);
+console.log("FILE:", request.file);
+        const updatedBeverage = await Beverage.findByIdAndUpdate(id, request.body, { new: true });
         if (updatedBeverage) {
             response.status(200).json({ msg: 'Drink updated', data: updatedBeverage });
         } else {
@@ -135,20 +153,20 @@ const getBeveragesByAlcoholic = async (request, response) => {
     }
 };
 
-    const getBeverageCategories = async (request, response) => {
-        try {
-            const categories = await Beverage.distinct('category');
-            if (!categories || categories.length == 0) {
-                response.status(404).json({ error: 'No categories found', data: categories });
-            }
-            else {
-                response.status(200).json({ msg: "OK", data: categories });
-            }
-        } catch (error) {
-            console.error({ error });
-            response.status(500).json({ error: 'Server errror: no categories found' });
+const getBeverageCategories = async (request, response) => {
+    try {
+        const categories = await Beverage.distinct('category');
+        if (!categories || categories.length == 0) {
+            response.status(404).json({ error: 'No categories found', data: categories });
         }
+        else {
+            response.status(200).json({ msg: "OK", data: categories });
+        }
+    } catch (error) {
+        console.error({ error });
+        response.status(500).json({ error: 'Server errror: no categories found' });
     }
+}
 
 
 export { getBeverages, getBeveragesByCategory, getBeverageByName, setBeverage, getBeverageById, deleteBeverageById, updateBeverageById, getBeveragesByAlcoholic, getBeverageCategories };
