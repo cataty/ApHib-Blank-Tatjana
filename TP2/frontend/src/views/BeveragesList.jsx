@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import ListItem from '../components/ListItem'
 import Header from '../components/Header'
+import Accordion from "../components/Accordion";
 import { useLocation } from "react-router-dom";
 
 function BeveragesList() {
@@ -33,6 +34,7 @@ function BeveragesList() {
 
     useEffect(() => {
         getBeverages();
+        getCategories();
     }, [refresh]);
 
     function handleRefresh() {
@@ -60,12 +62,45 @@ console.log(response);
         }
     }
 
+    
+    async function searchBeveragesByCategory(category) {
+        try {
+            const response = await fetch(`${API_URL}beverages/categories/${category}`);
+            if (response.ok) {
+                const { data } = await response.json();
+                console.log(data);
+                setBeverages(data);
+            } else {
+                alert('Something went wrong fetching beverages by category');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error fetching beverages by category');
+        }
+    }
+
+        async function getCategories() {
+        try {
+            const response = await fetch(`${API_URL}beverages/categories`);
+            if (response.ok) {
+                const { data } = await response.json();
+                setCategories(data);
+            } else {
+                alert('Something went wrong fetching the categories list');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error fetching categories list');
+        }
+    }
+
     if (loading) return <p>Loading...</p>;
 
     return (
         <>
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <Header title="List of Beverages" />
+            <hr />
             <form action="" onSubmit={searchBeverageByName}>
                 <h2>Search for a Beverage</h2>
                 <input
@@ -77,6 +112,29 @@ console.log(response);
                 />
                 <button type="submit">Search</button>
             </form>
+
+             <Accordion title="Filter by Category">
+                <ul className="filter-list">
+                    <li>
+                        <a href="#" onClick={event => { event.preventDefault(); getBeverages(); }}>
+                            All Categories
+                        </a>
+                    </li>
+                    {categories.map(category => (
+                        <li key={category}>
+                            <a
+                                href="#"
+                                onClick={event => {
+                                    event.preventDefault();
+                                    searchBeveragesByCategory(category);
+                                }}
+                            >
+                                {category}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </Accordion>
             <ul>
                 {beverages.map(beverage => (
                     <ListItem
