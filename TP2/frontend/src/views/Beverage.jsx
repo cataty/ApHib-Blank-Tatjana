@@ -52,7 +52,6 @@ function Beverage() {
                 {beverage.alcoholic && (
                     <p><strong>Alcohol Content:</strong> {beverage.alcoholContent}%</p>
                 )}
-                <p><strong>Description:</strong> {beverage.description}</p>
             </div>
         </>
     )
