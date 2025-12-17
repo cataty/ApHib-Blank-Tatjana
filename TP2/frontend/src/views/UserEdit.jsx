@@ -102,11 +102,11 @@ function UserEdit() {
             },
             body: formData,
         }
+
         try {
-            const response = await fetch(`${API_URL}users/${id}`, options); // TODO: validate input, change error msg language
+            const response = await fetch(`${API_URL}users/${id}`, options); 
 
             if (response.ok) {
-                const { data } = await response.json();
                 setUser({ _id: '', name: '', email: '', password: '', avatar: '' }); // Reset form
                 if (isAdmin && String(authUser._id) !== String(id)) {
                     navigate('/users', { state: { message: { text: "User edited successfully!", type: "success" } } });
@@ -116,7 +116,7 @@ function UserEdit() {
 
             } else {
                 const { error } = await response.json();
-                alert('Something went wrong during user update: ' + error);
+                setMessage('Something went wrong during user update: ' + error);
                 return;
             }
 
@@ -148,7 +148,11 @@ function UserEdit() {
                     onChange={handleChange}
                 />
                 {user.avatar && (
-                    <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="User avatar" />
+                    <img
+                        src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} 
+                        alt="User avatar" 
+                        class="preview"
+                    />
                 )}
                 <label htmlFor="file">Avatar</label>
                 <input

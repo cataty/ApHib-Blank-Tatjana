@@ -160,12 +160,12 @@ const getUserByName = async (request, response) => {
         const { name } = request.query;
         console.log(name);
         const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-        const beverages = await User.find({ name: cleanedName });
-        if (!beverages || beverages.length == 0) {
-            response.status(404).json({ error: 'Users not found', data: beverages });
+        const user = await User.find({ name: cleanedName });
+        if (!user || user.length == 0) {
+            response.status(404).json({ error: 'Users not found', data: user });
         }
         else {
-            response.status(200).json({ msg: "OK", data: beverages });
+            response.status(200).json({ msg: "OK", data: user });
         }
     } catch (error) {
         console.error({ error });

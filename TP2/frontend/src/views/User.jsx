@@ -46,7 +46,7 @@ function User() {
 
     return (
         <>
-            <Header title={`User profile: ${username}`} />
+            <Header title={`${username}`} />
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <div className="user-details">
                 <div className="user-img">
@@ -59,8 +59,10 @@ function User() {
                     alt="User avatar"
                 />
                 </div>
+                <div>
                 <p><strong>Email:</strong> {user.email}</p>
-                <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit user data</button>
+                <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>edit</button>
+                </div>
             </div>
         </>
     )

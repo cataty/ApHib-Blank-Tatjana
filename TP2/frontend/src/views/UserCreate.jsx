@@ -7,6 +7,8 @@ function UserCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
     const [user, setUser] = useState({ name: '', email: '', password: '', passwordRepeat: '' });
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
@@ -15,6 +17,13 @@ function UserCreate() {
     function handleChange(event) {
         setUser({ ...user, [event.target.name]: event.target.value });
         setMessage({ ...message, text: "" });
+    }
+
+    function handleFileChange(event) {
+        setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     function handleFocus(event) {
@@ -52,24 +61,36 @@ function UserCreate() {
         }
 
         // If all validations pass, proceed to post the user
+
+
+        const formData = new FormData();
+        formData.append('name', user.name);
+        formData.append('email', user.email);
+        formData.append('password', user.password);
+        if (file) {
+            formData.append('file', file);
+        }
+
+        console.log(formData);
+
         const options = {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name: user.name, email: user.email, password: user.password }),
+            body: formData,
         }
+
         try {
-            const response = await fetch(`${API_URL}users`, options); // TODO: change error message language
-            const { data } = await response.json();
+            const response = await fetch(`${API_URL}users`, options);
 
             if (response.ok) {
                 setUser({ name: '', email: '', password: '', passwordRepeat: '' }); // Reset 
                 navigate('/users', { state: { message: { text: "User created successfully!", type: "success" } } });
             } else {
-                setMessage({ text: `${data}`, type: 'alert' });
-                alert('Something went wrong during registration: ' + data);
+
+                const { error } = await response.json();
+                setMessage('Something went wrong during registration: ' + error);
                 return;
             }
 
@@ -91,7 +112,7 @@ function UserCreate() {
             <Header title="Create User" />
             <p>Fill in the form below to create a new user.</p>
 
-  
+
 
             <form enctype="multipart/form-data" onSubmit={postUser}>
                 <label htmlFor="name">Name</label>
@@ -134,12 +155,21 @@ function UserCreate() {
                     onFocus={handleFocus}
                     required
                 />
+                {file && (
+                    <img 
+                        src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${file}`} 
+                        alt="User avatar"  
+                        class="preview"
+                    />
+                )}
+                <label htmlFor="file">Avatar</label>
                 <input
                     type="file"
-                    id="avatar"
-                    name="avatar" 
-                >
-                </input>
+                    id="file"
+                    name="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                />
                 <button type="submit">Add User</button>
             </form>
         </>

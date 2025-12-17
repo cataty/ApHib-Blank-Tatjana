@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import upload from "../middleware/imgUpload.js";
 import { getUsers, setUser, getUserById, deleteUserById, updateUserById, getUserByName, auth } from "../controllers/users.controller.js";
 import { uploadController } from "../controllers/upload.controller.js";
