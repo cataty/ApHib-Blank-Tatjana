@@ -114,7 +114,7 @@ return (
     <>
         {message && <div className={`message ${message.type}`}>{message.text}</div>}
         <Header title="List of Users" />
-        <hr />
+
         <form action="" onSubmit={() => { searchUserByName() }}>
               <label htmlFor="searchName">Type in a name to search for it</label>
                 <input

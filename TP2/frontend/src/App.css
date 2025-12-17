@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lemon&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ultra&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
 /* Base Styles */
@@ -16,28 +16,30 @@ code {
 
 /* Typography & Links */
 .App {
-  background-color: #282c34;
-  color: white;
+  background-color: #15171d;
+  color: #e6f0ff;
   text-align: center;
 }
 
 .App-link,
 a {
-  color: #e6ffed;
+  color: #e6f0ff;
   text-decoration: none;
+  font-weight:600;
 }
 
 /* App Header */
 .App-header {
+  background-color: #282c34;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  border-bottom: 1px solid #525461;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 30vmin;
   pointer-events: none;
 }
 
@@ -135,14 +137,17 @@ main {
 }
 
 h1{
+  color: hsl(226, 66%, 87%);
   font-size:3em;
+  padding-bottom:0.25em;
   margin-bottom:0.5em;
-  font-family: 'Lemon', 'Arial', sans-serif;
+  font-family: 'Ultra', 'Arial', sans-serif;
+  border-bottom:#3a3e69 2px dotted;
 }
 
 h2{
   font-size: 2em;
-  color: #fff;
+    font-family: 'Ultra', 'Arial', sans-serif;
 }
 
 h2 span{
@@ -152,12 +157,26 @@ h2 span{
 }
 
 h2.accordion-trigger{
-font-size:1.25em;
+font-family: 'Montserrat', Arial, sans-serif;
+font-size:1em;
 margin-bottom:1em;
+}
+
+h2:not(.accordion-trigger, form h2){
+  margin-bottom:2em;
+  padding-bottom:0.25em;
+    border-bottom:#3a3e69 2px dotted;
+}
+
+form h2{
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.25em;
+  font-weight: bold;
 }
 
 h3{
   font-size:1.25em;
+  color: white;
   font-weight:800;
 }
 
@@ -193,15 +212,14 @@ ul.ingredients{
 li {
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1em;
+  gap: 2em;
 }
 
 li img {
-  width: 60px;
+  width: 120px;
   object-fit: cover;
 }
 
@@ -209,23 +227,42 @@ li .drink-info {
   flex: 1;
 }
 
+ul.ingredients {
+  text-align: start;
+}
+
 ul.ingredients li{
-padding:0 80px;
+display: inline-block;
+padding:0 2rem;
 }
 
 .drink-list-item{
-  padding:4em;
+  padding:2em;
+  border: 1px solid #525461;
+  transition: all 0.5s;
+}
+
+.drink-list-item:hover{
+  background-color: #282c34;
+    border: 1px solid #6e749a;
 }
 
 .drink-details, .user-details{
-  max-width:400px;
+  max-width:720px;
   margin: auto;
-  background-color: #525461;
+  /* background-color: #525461; */
   padding:2rem;
+  display: flex;
+    background-color: #282c34;
+    margin-top:2rem;
+    border: 1px solid #6e749a;
+    border-radius: 0.25rem;
+    gap:2rem;
 }
 
 .drink-details p, .user-details p{
   margin:0.75em;
+  text-align: start;
 }
 
 .user-img{
@@ -236,7 +273,7 @@ padding:0 80px;
 
 .drink-image{
   margin:0 auto 2em auto;
-  max-width:280px;}
+  max-width: 50%;}
 
 .buttons {
   display: flex;
@@ -255,17 +292,20 @@ padding:0 80px;
   margin: auto;
 }
 
-.home div div:last-of-type{
-margin-top:2em;
-}
-
 .home-img{
   max-width:540px;
   margin: 0 auto 2em auto;
+  height:30vmin;
+  width:30vmin;
+  animation: App-logo-spin infinite linear 20s;
 }
 /* Filter List */
+.accordion-content{
+  transition: all 0.35s;
+}
+
 .accordion-block:last-of-type {
-  margin-bottom: 2.5em;
+  margin-bottom: 4em;
 }
 
 .filter-list {
@@ -286,7 +326,7 @@ margin-top:2em;
   background: #3a3e69;
   color: #ffffff;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition: all 0.32s;
 }
 
 .filter-list li a:hover {
@@ -313,9 +353,18 @@ thead {
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   form,
   ul {
     max-width: 98vw;
+  }
+
+  .drink-details, .user-details{
+    flex-direction: column;
+    gap:1rem;
+  }
+
+  .drink-image{
+    max-width:80%
   }
 }

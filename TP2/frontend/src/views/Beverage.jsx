@@ -47,11 +47,13 @@ function Beverage() {
                         }
                         alt="beverage placeholder"
                     /></div>
+                <div>
                 <p><strong>Category:</strong> {beverage.category}</p>
                 <p><strong>Alcoholic:</strong> {beverage.alcoholic ? "Yes" : "No"}</p>
                 {beverage.alcoholic && (
                     <p><strong>Alcohol Content:</strong> {beverage.alcoholContent}%</p>
                 )}
+                </div>
             </div>
         </>
     )

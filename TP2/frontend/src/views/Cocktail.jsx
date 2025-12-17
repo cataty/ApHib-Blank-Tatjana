@@ -48,7 +48,7 @@ function Cocktail() {
         <>
             <Header title={cocktail.name} />
             <div className="drink-details">
-                <div className="drink-image mb-4">
+                <div className="drink-image mb-2">
                     <img
                         src={
                             cocktail.image
@@ -57,6 +57,7 @@ function Cocktail() {
                         }
                         alt="cocktail placeholder"
                     /></div>
+                <div>
                 <p><strong>Category: </strong> {cocktail.category}</p>
                 <p><strong>Glass: </strong> {cocktail.glass}</p>
                 <p><strong>Garnish: </strong> {cocktail.garnish}</p>
@@ -73,7 +74,7 @@ function Cocktail() {
                     )}
                 </ul>
                 <p><strong>Preparation: </strong> {cocktail.preparation}</p>
-
+                </div>
             </div>
         </>
     );

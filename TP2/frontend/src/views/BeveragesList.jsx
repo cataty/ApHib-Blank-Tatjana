@@ -100,7 +100,7 @@ console.log(response);
         <>
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <Header title="List of Beverages" />
-            <hr />
+            
             <form action="" onSubmit={searchBeverageByName}>
                 <h2>Search for a Beverage</h2>
                 <input
