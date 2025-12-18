@@ -132,8 +132,7 @@ function CocktailsList() {
                     {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <Header title="List of Cocktails" />
 
-            <form action="" onSubmit={searchCocktailByName}>
-                <h2>Search for a Cocktail</h2>
+            <form className="search" action="" onSubmit={ searchCocktailByName }>
                 <label htmlFor="searchName">Type in a name to search for it</label>
                 <input
                     type="text"

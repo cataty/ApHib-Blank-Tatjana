@@ -81,42 +81,46 @@ function UsersList() {
         }
     }
 
-async function deleteUser(id) {
-    alert('Are you sure you want to delete this user?');
-    if (!window.confirm('Are you sure you want to delete this user?')) {
-        return;
-    }
-    const options = {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+    async function deleteUser(id) {
+        alert('Are you sure you want to delete this user?');
+        if (!window.confirm('Are you sure you want to delete this user?')) {
+            return;
+        }
+        const options = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        }
+        try {
+            const response = await fetch(`${API_URL}users/${id}`, options);
+
+            if (response.ok) {
+                const { data } = await response.json();
+                getUsers();
+            } else {
+                alert('Something went wrong deleting the user');
+            }
+        } catch (error) {
+            console.error(error);
+            console.log('Error deleting the user');
         }
     }
-    try {
-        const response = await fetch(`${API_URL}users/${id}`, options);
 
-        if (response.ok) {
-            const { data } = await response.json();
-            getUsers();
-        } else {
-            alert('Something went wrong deleting the user');
-        }
-    } catch (error) {
-        console.error(error);
-        console.log('Error deleting the user');
-    }
-}
+    if (loading) return <p>Loading...</p>;
 
-if (loading) return <p>Loading...</p>;
+    return (
+        <>
+            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            <Header title="List of Users" />
 
-return (
-    <>
-        {message && <div className={`message ${message.type}`}>{message.text}</div>}
-        <Header title="List of Users" />
+            <button className="mt-8" onClick={() => navigate('/users/create')}>
+                Create User
+            </button>
 
-        <form action="" onSubmit={() => { searchUserByName() }}>
-              <label htmlFor="searchName">Type in a name to search for it</label>
+            <form className="search" action="" onSubmit={searchUserByName}>
+                <label htmlFor="searchName">Type in a name to search for it</label>
                 <input
                     type="text"
                     name="name"
@@ -125,25 +129,22 @@ return (
                     onChange={handleChange}
                 />
                 <button type="submit">Search</button>
-        </form>
-
-        <button onClick={() => navigate('/users/create')}>
-            Create User
-        </button>
-        <ul>
-            {users.map(user => (
-                <ListItem
-                    onRefresh={handleRefresh}
-                    key={user._id}
-                    id={user._id}
-                    name={user.name}
-                    email={user.email}
-                    image={user.avatar}
-                />
-            ))}
-        </ul>
-    </>
-)
+            </form>
+            <h2>Users</h2>
+            <ul>
+                {users.map(user => (
+                    <ListItem
+                        onRefresh={handleRefresh}
+                        key={user._id}
+                        id={user._id}
+                        name={user.name}
+                        email={user.email}
+                        image={user.avatar}
+                    />
+                ))}
+            </ul>
+        </>
+    )
 }
 
 export default UsersList

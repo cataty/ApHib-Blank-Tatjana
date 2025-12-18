@@ -49,7 +49,7 @@ function BeveragesList() {
         event.preventDefault();
         try {
             const response = await fetch(`${API_URL}beverages/search/name?name=${searchParams.name}`);
-console.log(response);
+            console.log(response);
             if (response.ok) {
                 const { data } = await response.json();
                 setBeverages(data);
@@ -62,7 +62,7 @@ console.log(response);
         }
     }
 
-    
+
     async function searchBeveragesByCategory(category) {
         try {
             const response = await fetch(`${API_URL}beverages/categories/${category}`);
@@ -79,7 +79,7 @@ console.log(response);
         }
     }
 
-        async function getCategories() {
+    async function getCategories() {
         try {
             const response = await fetch(`${API_URL}beverages/categories`);
             if (response.ok) {
@@ -100,9 +100,8 @@ console.log(response);
         <>
             {message && <div className={`message ${message.type}`}>{message.text}</div>}
             <Header title="List of Beverages" />
-            
-            <form action="" onSubmit={searchBeverageByName}>
-                <h2>Search for a Beverage</h2>
+
+            <form className="search" action="" onSubmit={searchBeverageByName}>
                 <input
                     type="text"
                     name="name"
@@ -113,7 +112,7 @@ console.log(response);
                 <button type="submit">Search</button>
             </form>
 
-             <Accordion title="Filter by Category">
+            <Accordion title="Filter by Category">
                 <ul className="filter-list">
                     <li>
                         <a href="#" onClick={event => { event.preventDefault(); getBeverages(); }}>
@@ -135,6 +134,7 @@ console.log(response);
                     ))}
                 </ul>
             </Accordion>
+            <h2>Beverages</h2>
             <ul>
                 {beverages.map(beverage => (
                     <ListItem

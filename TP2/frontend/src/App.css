@@ -25,7 +25,7 @@ code {
 a {
   color: #e6f0ff;
   text-decoration: none;
-  font-weight:600;
+  font-weight: 600;
 }
 
 /* App Header */
@@ -53,6 +53,7 @@ a {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -78,12 +79,21 @@ nav ul li {
 /* Forms */
 form {
   display: flex;
-  flex-direction: column;
   max-width: 500px;
   margin: 2em auto;
-  padding: 1em 1.5em;
+  padding: 2em;
   border-radius: 8px;
   gap: 0.7em;
+  justify-content: center;
+}
+
+form:not(.search){
+    flex-direction: column;
+    border:1px solid #525461;
+}
+
+.search label{
+  display:none;
 }
 
 input {
@@ -102,18 +112,18 @@ button {
   border: none;
   border-radius: 0.25rem;
   font-weight: 600;
-  font-size:0.9rem;
-  padding:0.5rem 1rem;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
   margin: 0.5em 0;
-  transition:all 0.35s;
+  transition: all 0.35s;
 }
 
-button:hover{
+button:hover {
   background-color: #6e749a;
 }
 
-div label{
-padding:1em;
+div label {
+  padding: 1em;
 }
 
 /* Messages */
@@ -143,48 +153,48 @@ main {
   min-height: calc(100vw - 192px);
 }
 
-h1{
+h1 {
   color: hsl(226, 66%, 87%);
-  font-size:3em;
-  padding-bottom:0.25em;
-  margin-bottom:0.5em;
+  font-size: 3em;
+  padding-bottom: 0.25em;
+  margin-bottom: 0.5em;
   font-family: 'Ultra', 'Arial', sans-serif;
-  border-bottom:#3a3e69 2px dotted;
+  border-bottom: #3a3e69 2px dotted;
 }
 
-h2{
+h2 {
   font-size: 2em;
-    font-family: 'Ultra', 'Arial', sans-serif;
+  font-family: 'Ultra', 'Arial', sans-serif;
 }
 
-h2 span{
-  font-size:0.75em;
-  margin-left:0.25em;
-  padding-bottom:0.5em;
+h2 span {
+  font-size: 0.75em;
+  margin-left: 0.25em;
+  padding-bottom: 0.5em;
 }
 
-h2.accordion-trigger{
-font-family: 'Montserrat', Arial, sans-serif;
-font-size:1em;
-margin-bottom:1em;
+h2.accordion-trigger {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1em;
+  margin-bottom: 1em;
 }
 
-h2:not(.accordion-trigger, form h2){
-  margin-bottom:2em;
-  padding-bottom:0.25em;
-    border-bottom:#3a3e69 2px dotted;
+h2:not(.accordion-trigger, form h2) {
+  margin-bottom: 2em;
+  padding-bottom: 0.25em;
+  border-bottom: #3a3e69 2px dotted;
 }
 
-form h2{
+form h2 {
   font-family: 'Montserrat', Arial, sans-serif;
   font-size: 1.25em;
   font-weight: bold;
 }
 
-h3{
-  font-size:1.25em;
+h3 {
+  font-size: 1.25em;
   color: white;
-  font-weight:800;
+  font-weight: 800;
 }
 
 /* Footer */
@@ -208,11 +218,11 @@ ul {
   gap: 1.5em;
 }
 
-ul.ingredients{
-  display:flex;
-  flex-direction:column;
-  padding:0;
-  margin-top:0;
+ul.ingredients {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 0;
 }
 
 
@@ -238,49 +248,52 @@ ul.ingredients {
   text-align: start;
 }
 
-ul.ingredients li{
-display: inline-block;
-padding:0 2rem;
+ul.ingredients li {
+  display: inline-block;
+  padding: 0 2rem;
 }
 
-.drink-list-item{
-  padding:2em;
+.drink-list-item {
+  padding: 2em;
   border: 1px solid #525461;
   transition: all 0.5s;
 }
 
-.drink-list-item:hover{
+.drink-list-item:hover {
   background-color: #282c34;
-    border: 1px solid #6e749a;
+  border: 1px solid #6e749a;
 }
 
-.drink-details, .user-details{
-  max-width:720px;
+.drink-details,
+.user-details {
+  max-width: 720px;
   margin: auto;
   /* background-color: #525461; */
-  padding:2rem;
+  padding: 2rem;
   display: flex;
-    background-color: #282c34;
-    margin-top:2rem;
-    border: 1px solid #6e749a;
-    border-radius: 0.25rem;
-    gap:2rem;
+  background-color: #282c34;
+  margin-top: 2rem;
+  border: 1px solid #6e749a;
+  border-radius: 0.25rem;
+  gap: 2rem;
 }
 
-.drink-details p, .user-details p{
-  margin:0.75em;
+.drink-details p,
+.user-details p {
+  margin: 0.75em;
   text-align: start;
 }
 
-.user-img{
-  max-width:160px;
-  margin:auto;
-  margin-bottom:1em;
+.user-img {
+  max-width: 160px;
+  margin: auto;
+  margin-bottom: 1em;
 }
 
-.drink-image{
-  margin:0 auto 2em auto;
-  max-width: 50%;}
+.drink-image {
+  margin: 0 auto 2em auto;
+  max-width: 50%;
+}
 
 .buttons {
   display: flex;
@@ -288,26 +301,35 @@ padding:0 2rem;
   gap: 1em;
 }
 
-.home{
+.home {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction:column;
-  gap:1em;
+  flex-direction: column;
+  gap: 1em;
   min-height: calc(100vh - 192px);
-  max-width:1200px;
+  max-width: 1200px;
   margin: auto;
 }
 
-.home-img{
-  max-width:540px;
+.home p {
+  margin: 2rem 0;
+}
+
+.home-img {
+  max-width: 540px;
   margin: 0 auto 2em auto;
-  height:30vmin;
-  width:30vmin;
+  height: 30vmin;
+  width: 30vmin;
   animation: App-logo-spin infinite linear 20s;
 }
+
+.home h4 {
+  font-weight: 600;
+}
+
 /* Filter List */
-.accordion-content{
+.accordion-content {
   transition: all 0.35s;
 }
 
@@ -323,7 +345,7 @@ padding:0 2rem;
   list-style: none;
   padding: 0;
   margin-bottom: 2.5em;
-  max-width:1800px;
+  max-width: 1800px;
 }
 
 .filter-list li a {
@@ -361,17 +383,19 @@ thead {
 
 /* Responsive Design */
 @media (max-width: 720px) {
+
   form,
   ul {
     max-width: 98vw;
   }
 
-  .drink-details, .user-details{
+  .drink-details,
+  .user-details {
     flex-direction: column;
-    gap:1rem;
+    gap: 1rem;
   }
 
-  .drink-image{
-    max-width:80%
+  .drink-image {
+    max-width: 80%
   }
 }
