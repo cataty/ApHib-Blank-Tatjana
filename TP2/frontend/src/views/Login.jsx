@@ -14,7 +14,7 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if(location.state?.message) {
+    if (location.state?.message) {
         setMessage({ ...message, ...location.state.message });
     }
 
@@ -53,6 +53,10 @@ function Login() {
 
         try {
             const response = await fetch(`${API_URL}users/login`, options)
+            if (response.status === 400) {
+                setMessage({ ...message, text: "Email or password incorrect. Please check your input." });
+                return;
+            };
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);

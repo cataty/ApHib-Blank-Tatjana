@@ -105,7 +105,7 @@ function BeverageCreate() {
                 </div>
             )}
 
-            <form onSubmit={postBeverage}>
+            <form encType="multipart/form-data" onSubmit={postBeverage}>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -165,7 +165,7 @@ function BeverageCreate() {
                 <label htmlFor="file">Beverage image</label>
                 <div>
                     {preview && (
-                        <img src={preview} alt="Beverage image" />
+                        <img class="preview" src={preview ?? null} alt="Beverage image" />
                     )}
                     <input
                         type="file"

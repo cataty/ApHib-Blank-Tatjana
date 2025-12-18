@@ -7,7 +7,7 @@ import Toast from "../components/Toast";
 function CocktailCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
+    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: '', garnish: '', preparation: '', image: '' });
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
@@ -54,7 +54,7 @@ function CocktailCreate() {
             setMessage({ ...message, text: 'Please complete the Glass field.' });
             return;
         }
-        if (cocktail.ingredients.trim() === '') {
+        if (!cocktail.ingredients) {
             setMessage({ ...message, text: 'Please complete the Ingredients field.' });
             return;
         }
@@ -68,10 +68,6 @@ function CocktailCreate() {
         }
         if (cocktail.preparation.trim() === '') {
             setMessage({ ...message, text: 'Please complete the Preparation instructions field.' });
-            return;
-        }
-        if (!Array.isArray(ingredientsArray)) {
-            setMessage({ ...message, text: 'Ingredients must be an array.' });
             return;
         }
 
@@ -141,7 +137,7 @@ function CocktailCreate() {
             <p>Fill in the form below to create a new cocktail.</p>
 
 
-            <form action="" onSubmit={postCocktail}>
+            <form action="" encType="multipart/form-data" onSubmit={postCocktail}>
                 <h2>Add a new Cocktail</h2>
 
                 <label htmlFor="name">Name</label>
@@ -209,7 +205,7 @@ function CocktailCreate() {
                 <label htmlFor="file">Cocktail image</label>
                 <div>
                     {preview && (
-                        <img src={preview} alt="Cocktail image" />
+                        <img class="preview" src={preview ?? null} alt="Cocktail image" />
                     )}
                     <input
                         type="file"

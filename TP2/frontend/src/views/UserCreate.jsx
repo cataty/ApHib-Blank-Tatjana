@@ -89,9 +89,8 @@ function UserCreate() {
                 setUser({ name: '', email: '', password: '', passwordRepeat: '' }); // Reset 
                 navigate('/users', { state: { message: { text: "User created successfully!", type: "success" } } });
             } else {
-
                 const { error } = await response.json();
-                setMessage('Something went wrong during registration: ' + error);
+                setMessage({ text: 'Something went wrong during registration: ' + error, type: 'alert' });
                 return;
             }
 
@@ -115,7 +114,7 @@ function UserCreate() {
 
 
 
-            <form enctype="multipart/form-data" onSubmit={postUser}>
+            <form encType="multipart/form-data" onSubmit={postUser}>
                 <h2>Add a new User Account</h2>
 
                 <label htmlFor="name">Name</label>
@@ -141,7 +140,7 @@ function UserCreate() {
                 <label htmlFor="file">Avatar</label>
                 <div>
                     <img
-                        src={preview ?? ''}
+                        src={preview ?? null }
                         alt="User avatar"
                         class="preview"
                     />

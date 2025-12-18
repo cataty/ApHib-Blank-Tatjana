@@ -165,7 +165,7 @@ function BeverageEdit() {
 
                 <label htmlFor="file">Beverage image</label>
                 <div>
-                    <img src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`} alt="Beverage image" />
+                    <img class="preview" src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`} alt="Beverage image" />
 
                     <input
                         type="file"

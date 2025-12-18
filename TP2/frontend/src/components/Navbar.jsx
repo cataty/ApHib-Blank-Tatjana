@@ -1,11 +1,11 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from  '../context/AuthContext';
 
 function Navbar() {
     const { user, isAdmin, logout } = useContext(AuthContext);
     const isLoggedIn = !!user
-    const navigate = useNavigate();
+
 
     return (
         <nav>
@@ -21,11 +21,7 @@ function Navbar() {
                 {isLoggedIn ? (
                     <>
                         <li><NavLink to={`/users/${user.id}`}>Profile</NavLink></li>
-                        <li><NavLink to="/login" onClick={e => {
-                            e.preventDefault(); 
-                            logout();
-                            navigate('/login');
-                        }}>Logout</NavLink></li>
+                        <li><NavLink to="/login" onClick={ logout }>Logout</NavLink></li>
                     </>
                 ) : (
                     <>
