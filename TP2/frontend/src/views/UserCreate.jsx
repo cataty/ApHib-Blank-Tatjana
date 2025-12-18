@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useLocation } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function UserCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -115,6 +116,8 @@ function UserCreate() {
 
 
             <form enctype="multipart/form-data" onSubmit={postUser}>
+                <h2>Add a new User Account</h2>
+
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -135,6 +138,21 @@ function UserCreate() {
                     onFocus={handleFocus}
                     required
                 />
+                <label htmlFor="file">Avatar</label>
+                <div>
+                    <img
+                        src={preview ?? ''}
+                        alt="User avatar"
+                        class="preview"
+                    />
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
                 <label htmlFor="password">Password</label>
                 <input
                     type="password"
@@ -155,21 +173,7 @@ function UserCreate() {
                     onFocus={handleFocus}
                     required
                 />
-                {file && (
-                    <img 
-                        src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${file}`} 
-                        alt="User avatar"  
-                        class="preview"
-                    />
-                )}
-                <label htmlFor="file">Avatar</label>
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+
                 <button type="submit">Add User</button>
             </form>
         </>

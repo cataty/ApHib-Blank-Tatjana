@@ -1,7 +1,8 @@
-import { useState, useEffect, use } from "react"
+import { useState, useEffect, use } from "react";
 import { useLocation } from "react-router-dom";
-import ListItem from '../components/ListItem'
-import Header from '../components/Header'
+import ListItem from '../components/ListItem';
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 import Accordion from "../components/Accordion";
 
 function CocktailsList() {
@@ -129,7 +130,11 @@ function CocktailsList() {
 
     return (
         <>
-                    {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
             <Header title="List of Cocktails" />
 
             <form className="search" action="" onSubmit={ searchCocktailByName }>

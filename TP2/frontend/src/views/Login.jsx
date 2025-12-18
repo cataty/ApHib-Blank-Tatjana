@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function Login() {
 
@@ -76,11 +76,11 @@ function Login() {
     return (
         <>
             <Header title="Login" />
-            {message.text && ( // Display message if it exists
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
 
             <form action="" onSubmit={handleLogin}>
                 <label htmlFor="email">Email</label>

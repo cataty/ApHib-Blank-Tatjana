@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, Link, useLocation } from "react-router-dom";
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 import ListItem from '../components/ListItem';
 
 function UsersList() {
@@ -112,7 +113,12 @@ function UsersList() {
 
     return (
         <>
-            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
+                
             <Header title="List of Users" />
 
             <button className="mt-8" onClick={() => navigate('/users/create')}>

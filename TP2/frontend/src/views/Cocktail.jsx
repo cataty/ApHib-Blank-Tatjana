@@ -1,24 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import Header from '../components/Header'
-
-
-function Accordion({ title, children }) {
-    const [open, setOpen] = useState(false);
-    return (
-        <div className="accordion-block">
-            <h2 onClick={() => setOpen(!open)} style={{ cursor: 'pointer' }}>
-                {title} {open ? '▲' : '▼'}
-            </h2>
-            {open && <div className="accordion-content">{children}</div>}
-        </div>
-    );
-}
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function Cocktail() {
     const API_URL = process.env.REACT_APP_API_URL;
     const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '' });
     const { id } = useParams();
+    const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const [loading, setLoading] = useState(true);
 
 
@@ -46,6 +35,11 @@ function Cocktail() {
 
     return (
         <>
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
             <Header title={cocktail.name} />
             <div className="drink-details">
                 <div className="drink-image mb-2">
@@ -58,22 +52,22 @@ function Cocktail() {
                         alt="cocktail placeholder"
                     /></div>
                 <div>
-                <p><strong>Category: </strong> {cocktail.category}</p>
-                <p><strong>Glass: </strong> {cocktail.glass}</p>
-                <p><strong>Garnish: </strong> {cocktail.garnish}</p>
-                <p><strong>Ingredients: </strong></p>
-                <ul className="ingredients">
-                    {Array.isArray(cocktail.ingredients) && cocktail.ingredients.length > 0 ? (
-                        cocktail.ingredients.map((ing, idx) => (
-                            <li key={idx}>
-                                {ing.amount} {ing.unit} {ing.ingredient}
-                            </li>
-                        ))
-                    ) : (
-                        <li>No ingredients listed.</li>
-                    )}
-                </ul>
-                <p><strong>Preparation: </strong> {cocktail.preparation}</p>
+                    <p><strong>Category: </strong> {cocktail.category}</p>
+                    <p><strong>Glass: </strong> {cocktail.glass}</p>
+                    <p><strong>Garnish: </strong> {cocktail.garnish}</p>
+                    <p><strong>Ingredients: </strong></p>
+                    <ul className="ingredients">
+                        {Array.isArray(cocktail.ingredients) && cocktail.ingredients.length > 0 ? (
+                            cocktail.ingredients.map((ing, idx) => (
+                                <li key={idx}>
+                                    {ing.amount} {ing.unit} {ing.ingredient}
+                                </li>
+                            ))
+                        ) : (
+                            <li>No ingredients listed.</li>
+                        )}
+                    </ul>
+                    <p><strong>Preparation: </strong> {cocktail.preparation}</p>
                 </div>
             </div>
         </>

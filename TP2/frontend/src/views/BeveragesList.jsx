@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react"
-import ListItem from '../components/ListItem'
-import Header from '../components/Header'
+import { useState, useEffect } from "react";
+import ListItem from '../components/ListItem';
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 import Accordion from "../components/Accordion";
 import { useLocation } from "react-router-dom";
 
@@ -98,7 +99,11 @@ function BeveragesList() {
 
     return (
         <>
-            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
             <Header title="List of Beverages" />
 
             <form className="search" action="" onSubmit={searchBeverageByName}>

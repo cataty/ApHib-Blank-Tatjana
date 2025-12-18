@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function Home() {
 
@@ -17,7 +18,11 @@ function Home() {
   return (
     <>
       <div className="home">
-        {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
 
         <div className="w-100 lg:w-1/2 p-10">
           <div className="home-img">

@@ -1,12 +1,13 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function BeverageEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '', image: ''});
+    const [beverage, setBeverage] = useState({ _id: '', name: '', category: '', alcoholic: '', alcoholContent: '', image: '' });
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -108,12 +109,14 @@ function BeverageEdit() {
 
     return (
         <>
-            <Header title={`Edit Beverage Data: ${beverage.name}`} />
-            {message.text && ( // Display message if it exists
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )} <form onSubmit={putBeverage}>
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
+            <Header title={`Edit Beverage Data`} />
+            <form onSubmit={putBeverage}>
+                <h2> Edit Beverage: {beverage.name}</h2>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -161,16 +164,17 @@ function BeverageEdit() {
                 />
 
                 <label htmlFor="file">Beverage image</label>
+                <div>
+                    <img src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`} alt="Beverage image" />
 
-                <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${beverage.image}`} alt="Beverage image" />
-
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
 
                 <button type="submit">Save Beverage</button>
             </form>

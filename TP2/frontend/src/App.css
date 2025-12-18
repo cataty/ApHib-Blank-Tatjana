@@ -85,24 +85,41 @@ form {
   border-radius: 8px;
   gap: 0.7em;
   justify-content: center;
+
 }
 
-form:not(.search){
-    flex-direction: column;
-    border:1px solid #525461;
+form:not(.search) {
+  flex-direction: column;
+  border: 1px solid #525461;
 }
 
-.search label{
-  display:none;
+form div {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+align-items: center;
 }
 
-input {
+label {
+  font-weight: 700;
+}
+
+.search label {
+  display: none;
+}
+
+input,
+textarea {
   padding: 0.75rem;
   border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #939dd9;
+  max-width:100%;
 }
 
-input {
-  border: 1px solid #939dd9;
+.preview {
+  max-height: 120px;
+  max-width: 50%;
 }
 
 button {
@@ -128,11 +145,17 @@ div label {
 
 /* Messages */
 .message {
+  position: fixed;
+  top: 6rem;
+  left:2.5vw;
+  z-index:5;
   margin: 0 auto 3em auto;
-  padding: 1em;
+  padding: 2em;
   border-radius: 6px;
   font-weight: bold;
   text-align: center;
+  transition: all 0.5s;
+  width:95vw;
 }
 
 .message.success {
@@ -151,6 +174,7 @@ div label {
 main {
   padding: 6em;
   min-height: calc(100vw - 192px);
+
 }
 
 h1 {
@@ -383,10 +407,18 @@ thead {
 
 /* Responsive Design */
 @media (max-width: 720px) {
+  main {
+    padding: 2em;
+  }
 
   form,
   ul {
     max-width: 98vw;
+  }
+
+  form div{
+flex-direction: column;
+align-items: center;
   }
 
   .drink-details,

@@ -2,12 +2,14 @@ import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
+import Toast from "../components/Toast";
 
 function CocktailCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
     const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
     const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
@@ -18,6 +20,9 @@ function CocktailCreate() {
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     function handleFocus(event) {
@@ -27,17 +32,6 @@ function CocktailCreate() {
     async function postCocktail(event) {
         event.preventDefault();
         console.log(cocktail);
-
-        const ingredientsArray = cocktail.ingredients
-            .split(',')
-            .map(item => {
-                const parts = item.trim().split(' ');
-                const amount = parts[0] || '';
-                const unit = parts[1] || '';
-                const ingredient = parts.slice(2).join(' ') || '';
-                return { amount, unit, ingredient };
-            })
-            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
 
         // Validations
         if (cocktail.name.trim().length < 3) {
@@ -83,6 +77,18 @@ function CocktailCreate() {
 
 
         // If all validations pass, proceed to post the cocktail
+
+        const ingredientsArray = cocktail.ingredients
+            .split(',')
+            .map(item => {
+                const parts = item.trim().split(' ');
+                const amount = parts[0] || '';
+                const unit = parts[1] || '';
+                const ingredient = parts.slice(2).join(' ') || '';
+                return { amount, unit, ingredient };
+            })
+            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
+
         const formData = new FormData();
         formData.append('name', cocktail.name);
         formData.append('category', cocktail.category);
@@ -94,8 +100,8 @@ function CocktailCreate() {
             formData.append('file', file);
         };
 
-                console.log(formData);
-                
+        console.log(formData);
+
         const options = {
             method: 'POST',
             headers: {
@@ -124,7 +130,8 @@ function CocktailCreate() {
     }
 
     return (
-        <>            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
+        <>            
+        {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
             <div className={`message ${message.type}`}>
                 {message.text}
             </div>
@@ -199,13 +206,20 @@ function CocktailCreate() {
                     onFocus={handleFocus}
                     required
                 />
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                <label htmlFor="file">Cocktail image</label>
+                <div>
+                    {preview && (
+                        <img src={preview} alt="Cocktail image" />
+                    )}
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
+
                 <button type="submit">Add Cocktail</button>
             </form>
         </>
