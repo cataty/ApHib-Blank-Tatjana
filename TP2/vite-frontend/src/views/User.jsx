@@ -67,7 +67,7 @@ function User() {
                 </div>
                 <div>
                     <p><strong>Email:</strong> {user.email}</p>
-                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>edit</button>
+                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit</button>
                 </div>
             </div>
         </>

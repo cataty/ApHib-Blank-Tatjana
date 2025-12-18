@@ -1,5 +1,5 @@
 import './App.css';
-import {Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
 import AdminRoute from './utils/AdminRoute';
 
@@ -64,7 +64,7 @@ function App() {
               <User />
             </PrivateRoute>
           } />
-          
+
           <Route path="/users/create" element={<UserCreate />} />
           <Route path="/users/edit/:id" element={
             <PrivateRoute>
@@ -81,11 +81,17 @@ function App() {
               <UsersList />
             </AdminRoute>
           } />
-          
+
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+      
+      <footer>
+        <p>
+          &copy; 2025 Cocktail & Beverage Hub - Tatjana Blank - 25-1 - DWT4AV. All rights reserved.
+        </p>
+      </footer>
     </div>
   );
 }
