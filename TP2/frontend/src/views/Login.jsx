@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function Login() {
 
@@ -14,7 +14,7 @@ function Login() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if(location.state?.message) {
+    if (location.state?.message) {
         setMessage({ ...message, ...location.state.message });
     }
 
@@ -53,6 +53,10 @@ function Login() {
 
         try {
             const response = await fetch(`${API_URL}users/login`, options)
+            if (response.status === 400) {
+                setMessage({ ...message, text: "Email or password incorrect. Please check your input." });
+                return;
+            };
             if (response.ok) {
                 const data = await response.json();
                 console.log(data);
@@ -76,11 +80,11 @@ function Login() {
     return (
         <>
             <Header title="Login" />
-            {message.text && ( // Display message if it exists
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
 
             <form action="" onSubmit={handleLogin}>
                 <label htmlFor="email">Email</label>

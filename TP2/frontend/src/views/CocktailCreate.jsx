@@ -2,12 +2,14 @@ import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header'
+import Toast from "../components/Toast";
 
 function CocktailCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
     const { token } = useContext(AuthContext);
-    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: [], garnish: '', preparation: '', image: '' });
+    const [cocktail, setCocktail] = useState({ _id: '', name: '', category: '', glass: '', ingredients: '', garnish: '', preparation: '', image: '' });
     const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [message, setMessage] = useState({ text: '', type: 'alert' }); // Default type is 'alert'
     const navigate = useNavigate();
 
@@ -18,6 +20,9 @@ function CocktailCreate() {
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
+        if (event.target.files[0]) {
+            setPreview(URL.createObjectURL(event.target.files[0]));
+        }
     }
 
     function handleFocus(event) {
@@ -27,17 +32,6 @@ function CocktailCreate() {
     async function postCocktail(event) {
         event.preventDefault();
         console.log(cocktail);
-
-        const ingredientsArray = cocktail.ingredients
-            .split(',')
-            .map(item => {
-                const parts = item.trim().split(' ');
-                const amount = parts[0] || '';
-                const unit = parts[1] || '';
-                const ingredient = parts.slice(2).join(' ') || '';
-                return { amount, unit, ingredient };
-            })
-            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
 
         // Validations
         if (cocktail.name.trim().length < 3) {
@@ -60,7 +54,7 @@ function CocktailCreate() {
             setMessage({ ...message, text: 'Please complete the Glass field.' });
             return;
         }
-        if (cocktail.ingredients.trim() === '') {
+        if (!cocktail.ingredients) {
             setMessage({ ...message, text: 'Please complete the Ingredients field.' });
             return;
         }
@@ -76,13 +70,21 @@ function CocktailCreate() {
             setMessage({ ...message, text: 'Please complete the Preparation instructions field.' });
             return;
         }
-        if (!Array.isArray(ingredientsArray)) {
-            setMessage({ ...message, text: 'Ingredients must be an array.' });
-            return;
-        }
 
 
         // If all validations pass, proceed to post the cocktail
+
+        const ingredientsArray = cocktail.ingredients
+            .split(',')
+            .map(item => {
+                const parts = item.trim().split(' ');
+                const amount = parts[0] || '';
+                const unit = parts[1] || '';
+                const ingredient = parts.slice(2).join(' ') || '';
+                return { amount, unit, ingredient };
+            })
+            .filter(obj => obj.amount || obj.unit || obj.ingredient); // Remove empty objects if needed
+
         const formData = new FormData();
         formData.append('name', cocktail.name);
         formData.append('category', cocktail.category);
@@ -94,8 +96,8 @@ function CocktailCreate() {
             formData.append('file', file);
         };
 
-                console.log(formData);
-                
+        console.log(formData);
+
         const options = {
             method: 'POST',
             headers: {
@@ -124,7 +126,8 @@ function CocktailCreate() {
     }
 
     return (
-        <>            {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
+        <>            
+        {message.text && ( //Only render the <h4> element if message.text is not empty, null, or false.
             <div className={`message ${message.type}`}>
                 {message.text}
             </div>
@@ -134,7 +137,7 @@ function CocktailCreate() {
             <p>Fill in the form below to create a new cocktail.</p>
 
 
-            <form action="" onSubmit={postCocktail}>
+            <form action="" encType="multipart/form-data" onSubmit={postCocktail}>
                 <h2>Add a new Cocktail</h2>
 
                 <label htmlFor="name">Name</label>
@@ -199,13 +202,20 @@ function CocktailCreate() {
                     onFocus={handleFocus}
                     required
                 />
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                <label htmlFor="file">Cocktail image</label>
+                <div>
+                    {preview && (
+                        <img className="preview" src={preview ?? null} alt="Cocktail image" />
+                    )}
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
+
                 <button type="submit">Add Cocktail</button>
             </form>
         </>

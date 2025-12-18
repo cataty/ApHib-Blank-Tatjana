@@ -48,12 +48,12 @@ function ListItem({ id, name, image, onRefresh }) {
             const response = await fetch(`${API_URL}${itemType}s/${id}`, options);
 
             if (response.ok) {
-                const { data } = await response.json();
                 if (onRefresh) {
                     onRefresh();
                 }
             } else {
-                alert(`Something went wrong deleting the ${itemType}`);
+                const { error } = await response.json();
+                setMessage(`Something went wrong deleting the ${itemType}: `, error);
             }
         } catch (error) {
             console.error(error);
@@ -71,8 +71,8 @@ function ListItem({ id, name, image, onRefresh }) {
             </Routes>
             {isAdmin && (
                 <div className="buttons">
-                    <button type="button" onClick={() => onEdit(id)}>edit</button>
-                    <button type="button" onClick={() => onDelete(id)}>delete</button>
+                    <button type="button" onClick={() => onEdit(id)}>Edit</button>
+                    <button type="button" onClick={() => onDelete(id)}>Delete</button>
                 </div>
             )}
         </li>

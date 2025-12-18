@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function BeverageCreate() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -104,7 +105,7 @@ function BeverageCreate() {
                 </div>
             )}
 
-            <form onSubmit={postBeverage}>
+            <form encType="multipart/form-data" onSubmit={postBeverage}>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -162,16 +163,18 @@ function BeverageCreate() {
                 />
 
                 <label htmlFor="file">Beverage image</label>
-                {preview && (
-                    <img src={preview} alt="Beverage image" />
-                )}
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                <div>
+                    {preview && (
+                        <img className="preview" src={preview ?? null} alt="Beverage image" />
+                    )}
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
 
                 <button type="submit">Add Beverage</button>
             </form>

@@ -11,7 +11,7 @@ function PrivateRoute({ children }) {
     }
 
     // Render children if provided, otherwise render <Outlet />
-    return children ? children : <Outlet />;
+    return children ?? <Outlet />;
 }
 
 export default PrivateRoute;

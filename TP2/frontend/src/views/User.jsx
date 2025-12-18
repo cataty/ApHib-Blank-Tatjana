@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function User() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -46,21 +47,28 @@ function User() {
 
     return (
         <>
-            <Header title={`User profile: ${username}`} />
-            {message && <div className={`message ${message.type}`}>{message.text}</div>}
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
+            <Header title={`${username}`} />
+
             <div className="user-details">
                 <div className="user-img">
-                <img
-                    src={
-                        user.avatar
-                            ? `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`
-                            : '/path/to/placeholder.png'
-                    }
-                    alt="User avatar"
-                />
+                    <img
+                        src={
+                            user.avatar
+                                ? `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`
+                                : '/path/to/placeholder.png'
+                        }
+                        alt="User avatar"
+                    />
                 </div>
-                <p><strong>Email:</strong> {user.email}</p>
-                <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>Edit user data</button>
+                <div>
+                    <p><strong>Email:</strong> {user.email}</p>
+                    <button type="button" onClick={() => navigate(`/users/edit/${user._id}`)}>edit</button>
+                </div>
             </div>
         </>
     )

@@ -33,26 +33,26 @@ const getUsers = async (request, response) => {
 }
 
 const setUser = async (request, response) => {
-
-        if (request.file) {
-            request.body.avatar ='uploads/' + request.file.filename;
-        }
-
     try {
         const { name, email, password } = request.body;
 
         if (!name || !email || !password) {
-            response.status(400).json({ error: 'Required fields missing' });
+            return response.status(400).json({ error: 'Required fields missing' });
         }
 
         if (await User.findOne({ email: email })) {
-
             return response.status(400).json({ error: 'A user with this email already exists' });
-
         } else {
-            const passwordHash = await bcrypt.hash(password, 10) //10 es el numero de saltos de la salt, se puede cambiar
-            const newUser = new User({ name, email, password: passwordHash });
-            newUser.save();
+            const passwordHash = await bcrypt.hash(password, 10); //10 es el numero de saltos de la salt, se puede cambiar
+            
+            const userData = { name, email, password: passwordHash };
+            
+            if (request.file) {
+                userData.avatar = 'uploads/' + request.file.filename;
+            }
+            
+            const newUser = new User(userData);
+            await newUser.save();
 
             const id = newUser._id;
             response.status(202).json({ msg: `User saved, id: ${id}` });
@@ -160,12 +160,12 @@ const getUserByName = async (request, response) => {
         const { name } = request.query;
         console.log(name);
         const cleanedName = name.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
-        const beverages = await User.find({ name: cleanedName });
-        if (!beverages || beverages.length == 0) {
-            response.status(404).json({ error: 'Users not found', data: beverages });
+        const user = await User.find({ name: cleanedName });
+        if (!user || user.length == 0) {
+            response.status(404).json({ error: 'Users not found', data: user });
         }
         else {
-            response.status(200).json({ msg: "OK", data: beverages });
+            response.status(200).json({ msg: "OK", data: user });
         }
     } catch (error) {
         console.error({ error });

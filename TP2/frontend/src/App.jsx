@@ -1,9 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
-import { Outlet, Navigate, Route, Routes, NavLink } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import {Route, Routes } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
+import AdminRoute from './utils/AdminRoute';
 
 import Navbar from './components/Navbar';
 import Home from './views/Home';
@@ -25,8 +23,8 @@ import NotFound from './views/NotFound';
 function App() {
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="app">
+      <header className="app-header">
         <Navbar />
       </header>
 
@@ -41,9 +39,9 @@ function App() {
             </PrivateRoute>
           } />
           <Route path="/cocktails/edit/:id" element={
-            <PrivateRoute>
+            <AdminRoute>
               <CocktailEdit />
-            </PrivateRoute>
+            </AdminRoute>
           } />
           <Route path="/cocktails/*" element={<CocktailsList />} />
 
@@ -55,14 +53,11 @@ function App() {
             </PrivateRoute>
           } />
           <Route path="/beverages/edit/:id" element={
-            <PrivateRoute>
+            <AdminRoute>
               <BeverageEdit />
-            </PrivateRoute>
+            </AdminRoute>
           } />
           <Route path="/beverages/*" element={<BeveragesList />} />
-
-
-
 
           <Route path="/users/:id" element={
             <PrivateRoute>
@@ -77,10 +72,16 @@ function App() {
             </PrivateRoute>
           } />
           <Route path="/users/*" element={
-            <PrivateRoute>
+            <AdminRoute>
               <UsersList />
-            </PrivateRoute>
+            </AdminRoute>
           } />
+          <Route path="/users/search/*" element={
+            <AdminRoute>
+              <UsersList />
+            </AdminRoute>
+          } />
+          
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

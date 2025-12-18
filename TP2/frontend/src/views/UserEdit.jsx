@@ -1,7 +1,8 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import Header from '../components/Header'
+import Header from '../components/Header';
+import Toast from "../components/Toast";
 
 function UserEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -23,7 +24,7 @@ function UserEdit() {
 
     function handleFileChange(event) {
         setFile(event.target.files[0]);
-        if(event.target.files[0]) {
+        if (event.target.files[0]) {
             setPreview(URL.createObjectURL(event.target.files[0]));
         }
     }
@@ -102,11 +103,11 @@ function UserEdit() {
             },
             body: formData,
         }
+
         try {
-            const response = await fetch(`${API_URL}users/${id}`, options); // TODO: validate input, change error msg language
+            const response = await fetch(`${API_URL}users/${id}`, options);
 
             if (response.ok) {
-                const { data } = await response.json();
                 setUser({ _id: '', name: '', email: '', password: '', avatar: '' }); // Reset form
                 if (isAdmin && String(authUser._id) !== String(id)) {
                     navigate('/users', { state: { message: { text: "User edited successfully!", type: "success" } } });
@@ -116,7 +117,7 @@ function UserEdit() {
 
             } else {
                 const { error } = await response.json();
-                alert('Something went wrong during user update: ' + error);
+                setMessage('Something went wrong during user update: ' + error);
                 return;
             }
 
@@ -130,14 +131,16 @@ function UserEdit() {
 
     return (
         <>
-            {message.text && ( // Display message if it exists
-                <div className={`message ${message.type}`}>
-                    {message.text}
-                </div>
-            )}
-            <Header title={`Edit User Data: ${username}`} />
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
+
+            <Header title={`Edit User Data`} />
 
             <form encType="multipart/form-data" onSubmit={putUser}>
+                <h2>Edit User: {user.name}</h2>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -147,17 +150,22 @@ function UserEdit() {
                     placeholder={user.name}
                     onChange={handleChange}
                 />
-                {user.avatar && (
-                    <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`} alt="User avatar" />
-                )}
+
                 <label htmlFor="file">Avatar</label>
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                <div>
+                    <img
+                        src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`}
+                        alt="User avatar"
+                        className="preview"
+                    />
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
                 <label htmlFor="email">Email</label>
                 <input
                     type="email"

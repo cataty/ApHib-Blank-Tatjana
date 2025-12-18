@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header'
+import Toast from "../components/Toast";
 
 function CocktailEdit() {
     const API_URL = process.env.REACT_APP_API_URL;
@@ -112,7 +113,7 @@ function CocktailEdit() {
         }
 
         // If all validations pass, proceed to post the cocktail
-       const formData = new FormData();
+        const formData = new FormData();
         formData.append('name', cocktail.name);
         formData.append('category', cocktail.category);
         formData.append('glass', cocktail.glass);
@@ -123,7 +124,7 @@ function CocktailEdit() {
             formData.append('file', file);
         };
 
-                console.log(formData);
+        console.log(formData);
 
         const options = {
             method: 'PUT',
@@ -153,14 +154,16 @@ function CocktailEdit() {
     }
 
     return (
-        <>            {message.text && ( // Display message if it exists
-            <div className={`message ${message.type}`}>
-                {message.text}
-            </div>
-        )}
-            <Header title={`Edit Cocktail Data: ${cocktail.name}`} />
+        <>
+            {message &&
+                <Toast
+                    type={message.type}
+                    text={message.text}
+                />}
+            <Header title={`Edit Cocktail Data`} />
 
             <form action="" onSubmit={putCocktail}>
+                <h2> Edit Cocktail: {cocktail.name}</h2>
                 <label htmlFor="name">Name</label>
                 <input
                     type="text"
@@ -226,16 +229,17 @@ function CocktailEdit() {
                     onChange={handleChange}
                 />
                 <label htmlFor="file">Cocktail image</label>
+                <div>
+                    <img className="preview" src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Cocktail image" />
 
-                <img src={preview ? preview : `${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Cocktail image" />
-
-                <input
-                    type="file"
-                    id="file"
-                    name="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+                    <input
+                        type="file"
+                        id="file"
+                        name="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                    />
+                </div>
 
                 <button type="submit">Save Cocktail</button>
             </form>
