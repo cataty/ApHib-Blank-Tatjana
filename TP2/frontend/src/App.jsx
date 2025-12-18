@@ -1,8 +1,5 @@
-import logo from './logo.svg';
 import './App.css';
-import { Outlet, Navigate, Route, Routes, NavLink } from 'react-router-dom';
-import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import {Route, Routes } from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute';
 import AdminRoute from './utils/AdminRoute';
 
@@ -61,9 +58,6 @@ function App() {
             </AdminRoute>
           } />
           <Route path="/beverages/*" element={<BeveragesList />} />
-
-
-
 
           <Route path="/users/:id" element={
             <PrivateRoute>

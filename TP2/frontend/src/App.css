@@ -235,7 +235,13 @@ strong{
 
 /* Footer */
 footer {
-  height: 120px;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #525461;
+  background-color: #282c34;
+  color: #e6f0ff;
 }
 
 /* List and Details */
