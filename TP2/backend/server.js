@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import path from "path";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
@@ -8,12 +9,18 @@ dotenv.config();
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY;
 const PORT = process.env.PORT || 3000;
+const pathdirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-// Middleware to parse JSON bodies
+// Middleware to serve static files from the "public" directory
+app.use(express.static(path.join(pathdirname, 'public')));
+// Main route that redirects to index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(pathdirname, 'public', 'index.html'));
+});
+
+//Middleware to parse JSON bodies
 app.use(express.json());
-
-// Enable CORS
 app.use(cors());
 
 // Login route to generate a JWT
@@ -22,14 +29,14 @@ app.post('login', (req, res) => {
 
     // Validate user credentials
     if (username === 'user' && password === 'password') {
-        //create the JWT payload
+        // create payload for JWT
         const payload = {
             sub: username,
             name: "Ta Bla",
             admin: true
         };
 
-        //sign the JWT
+        // sign the JWT
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
         res.json({ token });
     } else {
