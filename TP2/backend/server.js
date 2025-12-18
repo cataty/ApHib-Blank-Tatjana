@@ -1,28 +1,33 @@
 import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import path from "path";
+import jwt from "jsonwebtoken";
+
 dotenv.config();
-const secret_key = process.env.SECRET_KEY;
-const express = require('express');
-const path = require('path');
+
 const app = express();
-const PORT = 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
+const PORT = process.env.PORT || 3000;
 
 
-// Middleware para servir archivos estaticos desde el directorio 'public'
+// Middleware to serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-//Ruta principal que redirige a index.html
+// Main route that redirects to index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-//Middleware para analizar cuerpos de solicitud JSON
+//Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors());
 
-//Ruta de inicio de sesión para generar un JWT
+// Login route to generate a JWT
 app.post('login', (req, res) => {
     const { username, password } = req.body;
 
-    //Validar las credenciales del usuario
+    // Validate user credentials
     if (username === 'user' && password === 'password') {
         //crear el payload del JWT
         const payload = {
@@ -35,12 +40,12 @@ app.post('login', (req, res) => {
         const token = JsonWebTokenError.sign(payload, SECRET_KEY, { expiresIn: '1h' });
         res.json({ token });
     } else {
-        res.status(401).send("Credenciales incorrectas");
+        res.status(401).send("Incorrect credentials");
     }
 }
 );
 
-//Middleware para verificar el JWT
+//Middleware to verify JWT
 const authenticateJWT = (req, res, next) => {
     const token = req.headers.authorization;
 
@@ -58,12 +63,12 @@ const authenticateJWT = (req, res, next) => {
     }
 };
 
-//Ruta protegida
+// Protected Route
 app.get('/protected', authenticateJWT, (req, res)=>{
-    res.send('Este es un recurso protegido');
+    res.send('This is a protected route.');
 });
 
-//Iniciar el servidor
+// Start server
 app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+    console.log(`Server listening at http://localhost:${PORT}`);
 });
