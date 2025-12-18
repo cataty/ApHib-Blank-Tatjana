@@ -205,7 +205,7 @@ function CocktailCreate() {
                 <label htmlFor="file">Cocktail image</label>
                 <div>
                     {preview && (
-                        <img class="preview" src={preview ?? null} alt="Cocktail image" />
+                        <img className="preview" src={preview ?? null} alt="Cocktail image" />
                     )}
                     <input
                         type="file"

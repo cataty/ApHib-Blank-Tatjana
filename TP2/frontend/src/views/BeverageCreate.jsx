@@ -165,7 +165,7 @@ function BeverageCreate() {
                 <label htmlFor="file">Beverage image</label>
                 <div>
                     {preview && (
-                        <img class="preview" src={preview ?? null} alt="Beverage image" />
+                        <img className="preview" src={preview ?? null} alt="Beverage image" />
                     )}
                     <input
                         type="file"

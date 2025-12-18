@@ -139,11 +139,11 @@ function UserCreate() {
                 />
                 <label htmlFor="file">Avatar</label>
                 <div>
-                    <img
+                    {preview && (<img
                         src={preview ?? null }
                         alt="User avatar"
-                        class="preview"
-                    />
+                        className="preview"
+                    />)}
                     <input
                         type="file"
                         id="file"

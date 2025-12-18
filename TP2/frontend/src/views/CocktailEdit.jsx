@@ -230,7 +230,7 @@ function CocktailEdit() {
                 />
                 <label htmlFor="file">Cocktail image</label>
                 <div>
-                    <img class="preview" src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Cocktail image" />
+                    <img className="preview" src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${cocktail.image}`} alt="Cocktail image" />
 
                     <input
                         type="file"

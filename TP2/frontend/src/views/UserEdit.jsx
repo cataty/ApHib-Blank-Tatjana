@@ -136,7 +136,7 @@ function UserEdit() {
                     type={message.type}
                     text={message.text}
                 />}
-                
+
             <Header title={`Edit User Data`} />
 
             <form encType="multipart/form-data" onSubmit={putUser}>
@@ -156,7 +156,7 @@ function UserEdit() {
                     <img
                         src={preview ?? `${API_URL.replace(/\/api\/?$/, '/')}${user.avatar}`}
                         alt="User avatar"
-                        class="preview"
+                        className="preview"
                     />
                     <input
                         type="file"
