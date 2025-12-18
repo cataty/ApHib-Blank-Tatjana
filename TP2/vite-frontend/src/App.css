@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Ultra&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+/* Base Styles */
+body {
+  margin: 0;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Typography & Links */
+.app {
+  background-color: #15171d;
+  color: #e6f0ff;
+  text-align: center;
+}
+
+.app-link,
+a {
+  color: #e6f0ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* App Header */
+.app-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #525461;
+}
+
+.app-logo {
+  height: 30vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .app-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Navigation */
+nav {
+  height: 72px;
+}
+
+nav ul {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto;
+  padding: 0;
+  list-style: none;
+}
+
+nav ul li {
+  padding: 20px;
+}
+
+/* Forms */
+form {
+  display: flex;
+  max-width: 500px;
+  border-radius: 8px;
+  gap: 0.7em;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto 0 auto;
+}
+
+form:not(.search) {
+  flex-direction: column;
+  margin: 2em auto;
+  padding: 2em;
+  border: 1px solid #525461;
+}
+
+form div {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  background: #3a3e69;
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  margin: 0.5em 0;
+  transition: all 0.35s;
+}
+
+button:hover {
+  background-color: #6e749a;
+}
+
+.search button{
+  padding: 1rem;
+  margin-bottom:2rem;
+  margin-left:-1rem;
+}
+
+label {
+  font-weight: 700;
+}
+
+div label {
+  padding: 1em;
+}
+
+.search label {
+  display: none;
+}
+
+input,
+textarea {
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #939dd9;
+  max-width: 100%;
+}
+
+.preview {
+  max-height: 120px;
+  max-width: 50%;
+}
+
+
+/* Messages */
+.message {
+  position: fixed;
+  top: 6rem;
+  left: 2.5vw;
+  z-index: 5;
+  margin: 0 auto 3em auto;
+  padding: 2em;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.5s;
+  width: 95vw;
+}
+
+.message.success {
+  background: rgba(200, 210, 244, 0.75);
+  color: #0c5229;
+}
+
+.message.alert {
+  background: rgba(255, 244, 230, 0.75);
+  color: #b85c00;
+  border: 1px solid #ffd6a5;
+}
+
+/* Main Layout */
+main {
+  padding: 6em;
+  min-height: calc(100vw - 192px);
+
+}
+
+h1 {
+  color: hsl(226, 66%, 87%);
+  font-size: 3em;
+  padding-bottom: 0.25em;
+  margin-bottom: 0.5em;
+  font-family: 'Ultra', 'Arial', sans-serif;
+  border-bottom: #3a3e69 2px dotted;
+}
+
+h2 {
+  font-size: 2em;
+  font-family: 'Ultra', 'Arial', sans-serif;
+}
+
+h2 span {
+  font-size: 0.75em;
+  margin-left: 0.25em;
+  padding-bottom: 0.5em;
+}
+
+h2.accordion-trigger {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+h2:not(.accordion-trigger, form h2) {
+  margin-bottom: 2em;
+  padding-bottom: 0.25em;
+  border-bottom: #3a3e69 2px dotted;
+}
+
+form h2 {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.25em;
+  color: white;
+  font-weight: 800;
+}
+
+strong{
+  color: #939dd9;
+}
+
+/* Footer */
+footer {
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #525461;
+  background-color: #282c34;
+  color: #e6f0ff;
+}
+
+/* List and Details */
+.cocktails-header {
+  text-align: center;
+  margin-bottom: 1.5em;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 2em auto;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5em;
+}
+
+ul.ingredients {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 0;
+}
+
+
+li {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+
+li img {
+  width: 120px;
+  object-fit: cover;
+}
+
+li .drink-info {
+  flex: 1;
+}
+
+ul.ingredients {
+  text-align: start;
+}
+
+ul.ingredients li {
+  display: inline-block;
+  padding: 0 2rem;
+}
+
+.drink-list-item {
+  padding: 2em;
+  border: 1px solid #525461;
+  transition: all 0.5s;
+}
+
+.drink-list-item:hover {
+  background-color: #282c34;
+  border: 1px solid #6e749a;
+}
+
+.drink-details,
+.user-details {
+  max-width: 720px;
+  margin: auto;
+  /* background-color: #525461; */
+  padding: 2rem;
+  display: flex;
+  background-color: #282c34;
+  margin-top: 2rem;
+  border: 1px solid #6e749a;
+  border-radius: 0.25rem;
+  gap: 2rem;
+}
+
+.drink-details p,
+.user-details p {
+  margin: 0.75em;
+  text-align: start;
+}
+
+.user-img {
+  max-width: 160px;
+  margin: auto;
+  margin-bottom: 1em;
+}
+
+.drink-image {
+  margin: 0 auto 2em auto;
+  max-width: 50%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+  min-height: calc(100vh - 192px);
+  max-width: 1200px;
+  margin: auto;
+}
+
+.home p {
+  margin: 2rem 0;
+}
+
+.home-img {
+  max-width: 540px;
+  margin: 0 auto 2em auto;
+  height: 30vmin;
+  width: 30vmin;
+  animation: App-logo-spin infinite linear 20s;
+}
+
+.home h4 {
+  font-weight: 600;
+}
+
+/* Filter List */
+.accordion-content {
+  transition: all 0.35s;
+}
+
+.accordion-block:last-of-type {
+  margin-bottom: 4em;
+}
+
+.filter-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5em;
+  max-width: 1800px;
+}
+
+.filter-list li a {
+  display: inline-block;
+  padding: 0.4em 1em;
+  border-radius: 4px;
+  background: #3a3e69;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.32s;
+}
+
+.filter-list li a:hover {
+  background: #207544;
+  color: #fff;
+}
+
+/* Tables */
+table {
+  margin: 2em auto 0 auto;
+  border-collapse: collapse;
+  min-width: 400px;
+}
+
+th,
+td {
+  padding: 0.7em 1.2em;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+thead {
+  background: #363636;
+}
+
+/* Responsive Design */
+@media (max-width: 720px) {
+  main {
+    padding: 2em;
+  }
+
+  form,
+  ul {
+    max-width: 98vw;
+  }
+
+  form div {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .drink-details,
+  .user-details {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .drink-image {
+    max-width: 80%
+  }
+}

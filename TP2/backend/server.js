@@ -8,12 +8,13 @@ dotenv.config();
 
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const pathdirname = path.dirname(new URL(import.meta.url).pathname);
 
 
 // Middleware to serve static files from the "public" directory
 app.use(express.static(path.join(pathdirname, 'public')));
+
 // Main route that redirects to index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(pathdirname, 'public', 'index.html'));
@@ -70,5 +71,5 @@ app.get('/protected', authenticateJWT, (req, res)=>{
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}`);
+    console.log(`Server listening at port: ${PORT}`);
 });
