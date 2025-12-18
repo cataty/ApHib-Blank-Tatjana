@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import path from "path";
 import jwt from "jsonwebtoken";
 
 dotenv.config();
@@ -11,16 +10,10 @@ const SECRET_KEY = process.env.SECRET_KEY;
 const PORT = process.env.PORT || 3000;
 
 
-// Middleware to serve static files from the "public" directory
-app.use(express.static(path.join(path.dirname(), 'public')));
-
-// Main route that redirects to index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(path.dirname(), 'public', 'index.html'));
-});
-
-//Middleware to parse JSON bodies
+// Middleware to parse JSON bodies
 app.use(express.json());
+
+// Enable CORS
 app.use(cors());
 
 // Login route to generate a JWT
@@ -29,15 +22,15 @@ app.post('login', (req, res) => {
 
     // Validate user credentials
     if (username === 'user' && password === 'password') {
-        //crear el payload del JWT
+        //create the JWT payload
         const payload = {
             sub: username,
             name: "Ta Bla",
             admin: true
         };
 
-        //firmar el JWT
-        const token = JsonWebTokenError.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        //sign the JWT
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
         res.json({ token });
     } else {
         res.status(401).send("Incorrect credentials");
