@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import path from "path";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const jwt = require('jsonwebtoken');
 
 const app = express();
 const SECRET_KEY = process.env.SECRET_KEY;
