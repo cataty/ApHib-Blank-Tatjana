@@ -167,13 +167,12 @@ textarea {
 }
 
 .message.success {
-  background: hsl(226, 66%, 87%);
+  background: rgba(200, 210, 244, 0.75);
   color: #0c5229;
-  border: 1px solid #b7e4c7;
 }
 
 .message.alert {
-  background: #fff4e6;
+  background: rgba(255, 244, 230, 0.75);
   color: #b85c00;
   border: 1px solid #ffd6a5;
 }

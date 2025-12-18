@@ -87,7 +87,7 @@ function UserCreate() {
 
             if (response.ok) {
                 setUser({ name: '', email: '', password: '', passwordRepeat: '' }); // Reset 
-                navigate('/users', { state: { message: { text: "User created successfully!", type: "success" } } });
+                navigate('/', { state: { message: { text: "User created successfully!", type: "success" } } });
             } else {
                 const { error } = await response.json();
                 setMessage({ text: 'Something went wrong during registration: ' + error, type: 'alert' });
