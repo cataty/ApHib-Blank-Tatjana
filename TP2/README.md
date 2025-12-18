@@ -1,4 +1,4 @@
-# AH Cocktail & Beverage Hub
+# AH Cocktail Database
 
 This project is a full-stack web application for managing a cocktail and beverage database. It allows users to browse, create, edit, and delete cocktails and beverages, as well as manage user authentication and authorization. The project is organized into two main parts: a backend (Node.js/Express API) and a frontend (React, with Vite for fast development and builds).
 
